@@ -52,6 +52,15 @@ class Card():
             "color"  : color
         }
 
+    def __eq__(self, other):
+        """
+        Replace default == method
+        """
+        if not isinstance(other, Card):
+            raise NotImplementedError
+        
+        return self.get_attributes() == other.get_attributes()
+
     def get_attributes(self):
         """
         Get all attributes as a dict
@@ -88,32 +97,6 @@ class Card():
         """
         return self.__attributes["color"]
 
-
-def is_a_set(card1, card2, card3):
-    """
-    A function to check if the given cards are a SET.
-    """
-    if not (
-        isinstance(card1, Card)
-        and isinstance(card2, Card)
-        and isinstance(card3, Card)
-    ):
-        # don't attempt to compare against unrelated types
-        return NotImplemented
-
-    for key in card1.get_attributes():
-        could_be_a_set = check_val(
-            card1.get_attributes()[key],
-            card2.get_attributes()[key],
-            card3.get_attributes()[key]
-        )
-
-        if could_be_a_set is False:
-            return False
-
-    return True
-
-
 def check_val(val1, val2, val3):
     """
     Check if values are all equal or all different
@@ -127,3 +110,27 @@ def check_val(val1, val2, val3):
         return True
 
     return False
+
+def is_a_set(card1, card2, card3):
+    """
+    A function to check if the given cards are a SET.
+    """
+    if not (
+        isinstance(card1, Card)
+        and isinstance(card2, Card)
+        and isinstance(card3, Card)
+    ):
+        # don't attempt to compare against unrelated types
+        raise NotImplementedError
+
+    for key in card1.get_attributes():
+        could_be_a_set = check_val(
+            card1.get_attributes()[key],
+            card2.get_attributes()[key],
+            card3.get_attributes()[key]
+        )
+
+        if could_be_a_set is False:
+            return False
+
+    return True

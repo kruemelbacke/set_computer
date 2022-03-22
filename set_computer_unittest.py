@@ -17,34 +17,49 @@ class TestStringMethods(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             se.Card([-1,0], 1, "oval", "solid", "red")
-            
+
         with self.assertRaises(ValueError):
             se.Card([0,-1], 1, "oval", "solid", "red")
-            
+
         with self.assertRaises(ValueError):
             se.Card([3,0], 1, "oval", "solid", "red")
-            
+
         with self.assertRaises(ValueError):
             se.Card([0,7], 1, "oval", "solid", "red")
-            
+
         with self.assertRaises(ValueError):
             se.Card([0,0], 0, "oval", "solid", "red")
-            
+
         with self.assertRaises(ValueError):
             se.Card([0,0], 4, "oval", "solid", "red")
-            
+
         with self.assertRaises(ValueError):
             se.Card([0,0], 1, "triangle", "solid", "red")
-            
+
         with self.assertRaises(ValueError):
             se.Card([0,0], 1, "oval", "lol", "red")
-                
+
         with self.assertRaises(ValueError):
             se.Card([0,0], 1, "oval", "solid", "pink")
-                
+
         with self.assertRaises(ValueError):
             se.Card(0, 1, 2, 3, 4)
 
+    def test_eq_method(self):
+        """"
+        Test == equal method
+        """
+        card1 = se.Card([0,0], 1, "oval", "solid", "red")
+        card2 = se.Card([0,0], 1, "oval", "solid", "red")
+
+        self.assertTrue(card1==card2)
+
+        card1 = se.Card([0,0], 1, "oval", "hatched", "red")
+
+        self.assertFalse(card1==card2)
+
+        with self.assertRaises(NotImplementedError):
+            self.assertTrue(card1=="ohgotteinFEHLER")
 
     def test_get_methods(self):
         """
@@ -58,12 +73,22 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(card.get_color(), "red")
         self.assertIsInstance(card.get_attributes(), dict)
 
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-        with self.assertRaises(TypeError):
-            s.split(2)
+    def test_check_set(self):
+        """
+        Test SET-checking method
+        """
+        card1 = se.Card([0,0], 1, "oval", "solid", "red")
+        card2 = se.Card([0,1], 2, "oval", "empty", "red")
+        card3 = se.Card([0,2], 3, "oval", "hatched", "red")
+
+        self.assertTrue(se.is_a_set(card1, card2, card3))
+
+        card1 = se.Card([0,0], 1, "diamond", "solid", "red")
+
+        self.assertFalse(se.is_a_set(card1, card2, card3))
+
+        with self.assertRaises(NotImplementedError):
+            se.is_a_set(card1, card2, "hello marvin")
 
 if __name__ == '__main__':
     unittest.main()
