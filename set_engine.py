@@ -35,7 +35,7 @@ class Card():
             and position[0] <= 2
             and isinstance(position[1], int)
             and position[1] >= 0
-            and position[1] <= 3
+            and position[1] <= 6
             and number in [1,2,3]
             and symbol in ["oval", "diamond", "wave"]
             and shading in ["empty", "hatched", "solid"]

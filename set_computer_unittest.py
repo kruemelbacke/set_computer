@@ -25,7 +25,7 @@ class TestStringMethods(unittest.TestCase):
             se.Card([3,0], 1, "oval", "solid", "red")
             
         with self.assertRaises(ValueError):
-            se.Card([0,4], 1, "oval", "solid", "red")
+            se.Card([0,7], 1, "oval", "solid", "red")
             
         with self.assertRaises(ValueError):
             se.Card([0,0], 0, "oval", "solid", "red")
