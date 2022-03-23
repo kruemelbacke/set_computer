@@ -2,6 +2,13 @@
 This module represents the game itself with card and rules
 """
 
+possible_attributes = {
+    "number" : [1,2,3],
+    "symbol" : ["oval", "diamond", "wave"],
+    "shading" : ["empty", "hatched", "solid"],
+    "color" : ["red", "green", "purple"]
+}
+
 class Card():
     """
     A class to represent a card.
@@ -10,16 +17,6 @@ class Card():
 
     Attributes
     ----------
-    position : list of int
-        x,y coordinates on the game board
-    number : int
-        count of symbols on card (1, 2 or 3)
-    symbol : str
-        kind of symbol ("oval", "diamond" or "wave")
-    shading : str
-        kind of shading ("empty, "hatched" or "solid")
-    color : str
-        color of the symbols ("red", "green" or "purple")
 
     Methods
     -------
@@ -36,10 +33,10 @@ class Card():
             and isinstance(position[1], int)
             and position[1] >= 0
             and position[1] <= 6
-            and number in [1,2,3]
-            and symbol in ["oval", "diamond", "wave"]
-            and shading in ["empty", "hatched", "solid"]
-            and color in ["red", "green", "purple"]
+            and number in possible_attributes["number"]
+            and symbol in possible_attributes["symbol"]
+            and shading in possible_attributes["shading"]
+            and color in possible_attributes["color"]
         ):
             raise ValueError
 
