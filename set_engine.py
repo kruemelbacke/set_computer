@@ -55,7 +55,7 @@ class Card():
         """
         if not isinstance(other, Card):
             raise NotImplementedError
-        
+
         return self.get_attributes() == other.get_attributes()
 
     def get_attributes(self):
@@ -101,9 +101,9 @@ def check_val(val1, val2, val3):
     Returns True if could be a SET candidate -> all equal, all different
     Returns False if only 2 values are equal or different respectivly
     """
-    if val1 == val2 == val3:
+    if val1 == val2 and val1 == val3:
         return True
-    if val1 != val2 != val3:
+    if val1 != val2 and val1!= val3 and val2 != val3:
         return True
 
     return False
@@ -131,3 +131,29 @@ def is_a_set(card1, card2, card3):
             return False
 
     return True
+
+def find_set_primitive_loop(cards):
+    """
+    xx
+    """
+    counter = 0
+    if len(cards) >= 3:
+        for card1 in cards:
+            for card2 in cards:
+                for card3 in cards:
+                    counter += 1
+                    if card1 == card2 or card1 == card3 or card2 == card3:
+                        continue
+                    if is_a_set(card1, card2, card3):
+                        # print("Found a SET after "+str(counter)+" attempts\n")
+                        return [card1, card2, card3]
+    # print("No SET found after "+str(counter)+" attempts\n")
+    return []
+
+def show_cards(cards):
+    """
+    Print attributes of given cards
+    """
+    for card in cards:
+        print(card.get_attributes())
+    print("\n")
