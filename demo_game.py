@@ -132,7 +132,7 @@ def play_games_and_plot_histogram(number_of_games):
     Play 'number_of_games' times and plot histogram of found SETs in each game
     """
     number_of_found_sets = []
-    for i in tqdm(range(number_of_games)):
+    for i in tqdm(range(number_of_games)): # pylint: disable=unused-variable
         number_of_found_sets.append(play_game(verbose_output=True))
     plt.hist(number_of_found_sets)
     plt.title("Number of found SETs ("+str(number_of_games)+" games)")
