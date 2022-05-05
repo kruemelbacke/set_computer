@@ -1,9 +1,7 @@
-import pygame
-import pygame.camera
+from picamera import PiCamera
 
-pygame.camera.init()
-pygame.camera.list_cameras() #Camera detected or not
-cam = pygame.camera.Camera("/dev/video0",(640,480))
-cam.start()
-img = cam.get_image()
-pygame.image.save(img,"filename.jpg")
+camera = PiCamera()
+camera.resolution = (2592, 1944 )
+for i in range(10):
+
+    camera.capture('/home/pi/Desktop/image%s.jpg' % i)
