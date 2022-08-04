@@ -60,9 +60,9 @@ class Card():
 
     def get_attributes(self):
         """
-        Get all attributes as a dict
+        Get all attributes as a dict and position
         """
-        return self.__attributes
+        return self.__attributes, self.__position
 
     def get_position(self):
         """
@@ -93,6 +93,12 @@ class Card():
         Get color of the symbol
         """
         return self.__attributes["color"]
+
+    def set_position(self, new_position):
+        """
+        Set position of card e.g. for updating after SET finding
+        """
+        self.__position = new_position
 
 def check_val(val1, val2, val3):
     """
