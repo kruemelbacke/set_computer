@@ -10,7 +10,9 @@ time.sleep(3)
 
 while True:
     img = CamStream.get()
-    cv.imshow('Camera Test', img)
+    cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
+    cv.setWindowProperty("window",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
+    cv.imshow("window", img)
 
     key = cv.waitKey(1) & 0xFF
 
