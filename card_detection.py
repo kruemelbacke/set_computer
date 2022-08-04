@@ -205,9 +205,43 @@ if __name__ == '__main__':
         # Pre-process camera image (gray, blur, and threshold it)
         pre_proc = preprocess_image(img)
 
+         # Find and sort the contours of all cards in the image (query cards)
+        cnts_sort, cnt_is_card = find_cards(pre_proc)
+
+        # If there are no contours, do nothing
+        if len(cnts_sort) != 0:
+
+            # Initialize a new "cards" list to assign the card objects.
+            # k indexes the newly made array of cards.
+            cards = []
+            k = 0
+
+            # For each contour detected:
+            for i, _ in enumerate(cnts_sort):
+                if (cnt_is_card[i] == 1):
+
+                    # Create a card object from the contour and append it to the list of cards.
+                    # preprocess_card function takes the card contour and contour and
+                    # determines the cards properties (corner points, etc). It generates a
+                    # flattened 200x300 image of the card, and isolates the card's
+                    # suit and rank from the image.
+                    cards.append(preprocess_card(cnts_sort[i],img))
+
+                    # Draw center point on the image.
+                    img = draw_results(img, cards[k])
+                    k+=1
+
+            # Draw card contours on image (have to do contours all at once or
+            # they do not show up properly for some reason)
+            if (len(cards) != 0):
+                temp_cnts = []
+                for j,_ in enumerate(cards):
+                    temp_cnts.append(cards[j].contour)
+                cv.drawContours(img,temp_cnts, -1, (255,0,0), 2)
+
         cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
         cv.setWindowProperty("window",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
-        cv.imshow("window", pre_proc)
+        cv.imshow("window", img)
 
         key = cv.waitKey(1) & 0xFF
 
