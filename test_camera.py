@@ -1,12 +1,10 @@
-from time import sleep
-from picamera import PiCamera
+from camera_stream import CameraStream
+import cv2 as cv
 
-camera = PiCamera()
-try:
-    camera.resolution = (2592, 1944 )
-    sleep(1)
-    for i in range(10):
 
-        camera.capture('/home/claudipi/Bilder/image%s.jpg' % i)
-finally:
-    camera.close()
+CamStream = CameraStream(res=(1280, 720), fps=10)
+CamStream.start_stream()
+
+while True:
+    img = CamStream.get()
+    cv.imshow(img)
