@@ -18,7 +18,7 @@ class CameraStream:
 
         self.running = False
 
-    def start_stream(self):
+    def run(self):
         """Start Stream as Thread"""
         self.running  = True
         Thread(target=self.__update,args=()).start()

@@ -4,7 +4,7 @@ import time
 
 
 CamStream = CameraStream(res=(1280, 720), fps=10)
-CamStream.start_stream()
+CamStream.run()
 
 time.sleep(3)
 
@@ -19,3 +19,5 @@ while True:
         break
 
     time.sleep(1)
+    
+CamStream.stop()
