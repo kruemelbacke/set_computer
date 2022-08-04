@@ -20,6 +20,5 @@ while True:
     if key == ord("q"):
         break
 
-    time.sleep(1)
     
 CamStream.stop()
