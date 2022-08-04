@@ -7,4 +7,4 @@ CamStream.start_stream()
 
 while True:
     img = CamStream.get()
-    cv.imshow(img)
+    cv.imshow('Camera Test', img)
