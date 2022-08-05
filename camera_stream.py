@@ -42,3 +42,19 @@ class CameraStream:
     def stop(self):
         """Stop CameraStream"""
         self.running = False
+
+if __name__ == '__main__':
+    from datetime import datetime
+    CamStream = CameraStream(res=(1280, 720), fps=10)
+    CamStream.run()
+
+    for i in range(10):
+        img = CamStream.get()
+        now = datetime.today().strftime(r'%Y-%m-%d %H:%M:%S')
+        cv.imwrite(f'Imgs/{now}', img)
+        cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
+        cv.setWindowProperty("window",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
+        cv.imshow("window", img)
+
+    CamStream.stop()
+    cv.destroyAllWindows()
