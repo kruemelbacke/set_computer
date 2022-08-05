@@ -45,7 +45,7 @@ def preprocess_image(image):
 
     _ , thresh = cv.threshold(blur,thresh_level,255,cv.THRESH_BINARY)
 
-    return thresh
+    return gray, blur, thresh
 
 def find_cards(thresh_image):
     """Finds all card-sized contours"""
@@ -89,8 +89,7 @@ def find_cards(thresh_image):
     return cnts_sort, cnt_is_card
 
 def preprocess_card(contour, image):
-    """Uses contour to find information about the query card. Isolates rank
-    and suit images from the card."""
+    """Uses contour to find information about the query card.."""
 
     # Initialize new Query_card object
     qCard = QueryCard()
@@ -180,14 +179,14 @@ def flattener(image, pts, w, h):
             temp_rect[2] = pts[2][0] # Bottom right
             temp_rect[3] = pts[1][0] # Bottom left
 
-    maxWidth = 200
-    maxHeight = 300
+    max_width = 200
+    max_height = 300
 
     # Create destination array, calculate perspective transform matrix,
     # and warp card image
-    dst = np.array([[0,0],[maxWidth-1,0],[maxWidth-1,maxHeight-1],[0, maxHeight-1]], np.float32)
+    dst = np.array([[0,0],[max_width-1,0],[max_width-1,max_height-1],[0, max_height-1]], np.float32)
     m = cv.getPerspectiveTransform(temp_rect,dst)
-    warp = cv.warpPerspective(image, m, (maxWidth, maxHeight))
+    warp = cv.warpPerspective(image, m, (max_width, max_height))
 
     return warp
 
@@ -195,6 +194,7 @@ if __name__ == '__main__':
     from camera_stream import CameraStream
     import cv2 as cv
     import time
+    import numpy as np
 
     CamStream = CameraStream(res=(1280, 720), fps=10)
     CamStream.run()
@@ -204,7 +204,7 @@ if __name__ == '__main__':
     while True:
         img = CamStream.get()
         # Pre-process camera image (gray, blur, and threshold it)
-        pre_proc = preprocess_image(img)
+        gray, blur, pre_proc = preprocess_image(img)
 
         # Find and sort the contours of all cards in the image (query cards)
         cnts_sort, cnt_is_card = find_cards(pre_proc)
@@ -234,15 +234,19 @@ if __name__ == '__main__':
 
             # Draw card contours on image (have to do contours all at once or
             # they do not show up properly for some reason)
-            if (len(cards) != 0):
+            if len(cards) != 0:
                 temp_cnts = []
                 for j,_ in enumerate(cards):
                     temp_cnts.append(cards[j].contour)
                 cv.drawContours(img,temp_cnts, -1, (255,0,0), 2)
 
+        # Show in FullScreen Window
         cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
         cv.setWindowProperty("window",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
-        cv.imshow("window", img)
+        row1 = np.hstack((gray, blur))
+        row2 = np.hstack((pre_proc, img))
+        img_matrix = np.vstack((row1, row2))
+        cv.imshow("window", img_matrix)
 
         key = cv.waitKey(1) & 0xFF
 
