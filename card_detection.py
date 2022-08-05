@@ -249,7 +249,7 @@ if __name__ == '__main__':
         cv.imshow("Threshold", cv.resize(pre_proc, (400,240)))
 
         # Show Card Detection
-        cv.imshow("CardDetection", cv.resize(img(400,240)))
+        cv.imshow("CardDetection", cv.resize(img, (400,240)))
 
         # Show max. 5 Flatten Images
         for num, card in enumerate(cards):
