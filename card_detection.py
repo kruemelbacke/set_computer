@@ -204,7 +204,7 @@ if __name__ == '__main__':
     while True:
         img = CamStream.get()
         # Pre-process camera image (gray, blur, and threshold it)
-        gray, blur, pre_proc = preprocess_image(img)
+        grey, blur, pre_proc = preprocess_image(img)
 
         # Find and sort the contours of all cards in the image (query cards)
         cnts_sort, cnt_is_card = find_cards(pre_proc)
@@ -243,8 +243,8 @@ if __name__ == '__main__':
         # Show in FullScreen Window
         cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
         cv.setWindowProperty("window",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
-        row1 = np.hstack((gray, blur))
-        row2 = np.hstack((pre_proc, img))
+        row1 = np.hstack((cv.cvtColor(grey, cv.COLOR_GRAY2BGR), cv.cvtColor(blur, cv.COLOR_GRAY2BGR)))
+        row2 = np.hstack((cv.cvtColor(pre_proc, cv.COLOR_GRAY2BGR), img))
         img_matrix = np.vstack((row1, row2))
         cv.imshow("window", img_matrix)
 
