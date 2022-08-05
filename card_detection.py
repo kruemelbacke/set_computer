@@ -183,8 +183,8 @@ def flattener(image, pts, w, h):
             temp_rect[2] = pts[2][0] # Bottom right
             temp_rect[3] = pts[1][0] # Bottom left
 
-    max_width = 200
-    max_height = 300
+    max_width = 60
+    max_height = 90
 
     # Create destination array, calculate perspective transform matrix,
     # and warp card image
