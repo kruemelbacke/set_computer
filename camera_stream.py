@@ -45,12 +45,14 @@ class CameraStream:
 
 if __name__ == '__main__':
     from datetime import datetime
-    import numpy as np
+    import time
+
     CamStream = CameraStream(res=(1280, 720), fps=10)
     CamStream.run()
+    time.sleep(2)
 
     for i in range(10):
-        img = np.asarray(CamStream.get())
+        img = CamStream.get()
         now = datetime.today().strftime(r'%Y-%m-%d %H:%M:%S')
         cv.imwrite(f'Imgs/{now}.png', img)
         cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
