@@ -215,7 +215,7 @@ if __name__ == '__main__':
         cnts_sort, cnt_is_card = find_cards(pre_proc)
 
         # If there are no contours, do nothing
-        if len(cnts_sort) != 0:
+        if len(cnts_sort) > 0:
 
             # Initialize a new "cards" list to assign the card objects.
             # k indexes the newly made array of cards.
