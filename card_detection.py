@@ -254,7 +254,13 @@ if __name__ == '__main__':
         # img_matrix = cv.resize(img_matrix, (800, 480))
         # cv.imshow("window", img_matrix)
 
-        cv.imshow("FlatCard", cards[0].warp)
+        for num, card in enumerate(cards):
+            if num == 0:
+                img_flatten = card.warp
+            else:
+                img_flatten = np.hstack((img_flatten, card.warp))
+        cv.imshow("FlattenCards", img_flatten)
+
 
         key = cv.waitKey(1) & 0xFF
 
