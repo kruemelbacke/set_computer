@@ -39,11 +39,7 @@ def preprocess_image(image):
     gray = cv.cvtColor(image,cv.COLOR_BGR2GRAY)
     blur = cv.GaussianBlur(gray,(5,5),0)
 
-    img_w, img_h = np.shape(image)[:2]
-    bkg_level = gray[int(img_h/100)][int(img_w/2)]
-    thresh_level = bkg_level + BKG_THRESH
-
-    _ , thresh = cv.threshold(blur,thresh_level,255,cv.THRESH_BINARY)
+    _ , thresh = cv.threshold(blur,128,255,cv.THRESH_BINARY)
 
     return gray, blur, thresh
 
@@ -203,6 +199,7 @@ if __name__ == '__main__':
 
     while True:
         img = CamStream.get()
+        # img = cv.imread("C:\\Users\\Claudio-PC\\Documents\\set_computer\\Imgs\\2022-08-05_11-16-12.png")
         # Pre-process camera image (gray, blur, and threshold it)
         grey, blur, pre_proc = preprocess_image(img)
 
