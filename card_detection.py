@@ -28,7 +28,7 @@ class QueryCard:
         self.width, self.height = 0, 0 # Width and height of card
         self.corner_pts = [] # Corner points of card
         self.center = [] # Center point of card
-        self.warp = [] # 200x300, flattened, grayed, blurred image
+        self.warp = [] # 200x300, flattened image
 
 
 
@@ -237,8 +237,7 @@ if __name__ == '__main__':
                     img = draw_results(img, cards[k])
                     k+=1
 
-            # Draw card contours on image (have to do contours all at once or
-            # they do not show up properly for some reason)
+            # Draw card contours on image
             if len(cards) != 0:
                 temp_cnts = []
                 for j,_ in enumerate(cards):
@@ -247,13 +246,15 @@ if __name__ == '__main__':
 
 
         # Show in FullScreen Window
-        cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
-        cv.setWindowProperty("window",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
-        row1 = np.hstack((cv.cvtColor(grey, cv.COLOR_GRAY2BGR), cv.cvtColor(blur, cv.COLOR_GRAY2BGR)))
-        row2 = np.hstack((cv.cvtColor(pre_proc, cv.COLOR_GRAY2BGR), img))
-        img_matrix = np.vstack((row1, row2))
-        img_matrix = cv.resize(img_matrix, (800, 480))
-        cv.imshow("window", img_matrix)
+        # cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
+        # cv.setWindowProperty("window",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
+        # row1 = np.hstack((cv.cvtColor(grey, cv.COLOR_GRAY2BGR), cv.cvtColor(blur, cv.COLOR_GRAY2BGR)))
+        # row2 = np.hstack((cv.cvtColor(pre_proc, cv.COLOR_GRAY2BGR), img))
+        # img_matrix = np.vstack((row1, row2))
+        # img_matrix = cv.resize(img_matrix, (800, 480))
+        # cv.imshow("window", img_matrix)
+
+        cv.imshow("FlatCard", cards[0].warp)
 
         key = cv.waitKey(1) & 0xFF
 
