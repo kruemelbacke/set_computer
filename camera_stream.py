@@ -58,6 +58,7 @@ if __name__ == '__main__':
         cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
         cv.setWindowProperty("window",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
         cv.imshow("window", img)
+        time.sleep(1)
 
     CamStream.stop()
     cv.destroyAllWindows()
