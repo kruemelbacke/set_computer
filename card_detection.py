@@ -24,12 +24,11 @@ class QueryCard:
 
     def __init__(self):
         self.contour = [] # Contour of card
+        self.area = 0 # Area size of card
         self.width, self.height = 0, 0 # Width and height of card
         self.corner_pts = [] # Corner points of card
         self.center = [] # Center point of card
         self.warp = [] # 200x300, flattened, grayed, blurred image
-        self.img_gray = [] # Thresholded, sized image of card's rank
-        self.img_colo = [] # Thresholded, sized image of card's suit
 
 
 
@@ -94,6 +93,7 @@ def preprocess_card(contour, image):
     qCard = QueryCard()
 
     qCard.contour = contour
+    qCard.area = cv.contourArea(contour)
 
     # Find perimeter of card and use it to approximate corner points
     peri = cv.arcLength(contour,True)
@@ -122,6 +122,11 @@ def draw_results(image, qCard):
     x = qCard.center[0]
     y = qCard.center[1]
     cv.circle(image,(x,y),5,(255,0,0),-1)
+
+    # Draw text twice, so letters have black outline
+    font = cv.FONT_HERSHEY_SIMPLEX
+    cv.putText(image,(f"Size:{qCard.area}"),(x-60,y-10),font,1,(0,0,0),3,cv.LINE_AA)
+    cv.putText(image,(f"Size:{qCard.area}"),(x-60,y-10),font,1,(50,200,200),2,cv.LINE_AA)
 
     return image
 
@@ -239,6 +244,7 @@ if __name__ == '__main__':
                 for j,_ in enumerate(cards):
                     temp_cnts.append(cards[j].contour)
                 cv.drawContours(img,temp_cnts, -1, (255,0,0), 2)
+
 
         # Show in FullScreen Window
         cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
