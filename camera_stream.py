@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
     for i in range(10):
         img = CamStream.get()
-        now = datetime.today().strftime(r'%Y-%m-%d-%H:%M:%S')
+        now = datetime.today().strftime(r'%Y-%m-%d_%H-%M-%S')
         cv.imwrite(f'Imgs/{now}.png', img)
         cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
         cv.setWindowProperty("window",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
