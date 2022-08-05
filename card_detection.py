@@ -243,6 +243,7 @@ if __name__ == '__main__':
         row1 = np.hstack((cv.cvtColor(grey, cv.COLOR_GRAY2BGR), cv.cvtColor(blur, cv.COLOR_GRAY2BGR)))
         row2 = np.hstack((cv.cvtColor(pre_proc, cv.COLOR_GRAY2BGR), img))
         img_matrix = np.vstack((row1, row2))
+        img_matrix = cv.resize(img_matrix, (800, 480))
         cv.imshow("window", img_matrix)
 
         key = cv.waitKey(1) & 0xFF
