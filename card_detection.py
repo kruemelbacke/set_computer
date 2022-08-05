@@ -4,20 +4,11 @@ import cv2 as cv
 import time
 
 ### Constants ###
-
-# Adaptive threshold levels
-BKG_THRESH = 60
-CARD_THRESH = 30
-
-# Width and height of card corner, where rank and suit are
-CORNER_WIDTH = 32
-CORNER_HEIGHT = 84
+BIN_THRESHOLD = 128
 
 CARD_MAX_AREA = 120000
 CARD_MIN_AREA = 10000
 
-
-### Structures to hold query card and train card information ###
 
 class QueryCard:
     """Structure to store information about query cards in the camera image."""
@@ -38,7 +29,7 @@ def preprocess_image(image):
     gray = cv.cvtColor(image,cv.COLOR_BGR2GRAY)
     blur = cv.GaussianBlur(gray,(5,5),0)
 
-    _ , thresh = cv.threshold(blur,128,255,cv.THRESH_BINARY)
+    _ , thresh = cv.threshold(blur,BIN_THRESHOLD,255,cv.THRESH_BINARY)
 
     return gray, blur, thresh
 
@@ -87,7 +78,7 @@ def find_cards(thresh_image):
     return cnts_sort, cnt_is_card
 
 def preprocess_card(contour, image):
-    """Uses contour to find information about the query card.."""
+    """Uses contour to find information about the query card."""
 
     # Initialize new Query_card object
     qCard = QueryCard()
@@ -121,7 +112,7 @@ def draw_results(image, qCard):
 
     x = qCard.center[0]
     y = qCard.center[1]
-    cv.circle(image,(x,y),5,(255,0,0),-1)
+    cv.circle(image,(x,y),5,(0,255,0),-1)
 
     # Draw text twice, so letters have black outline
     font = cv.FONT_HERSHEY_SIMPLEX
@@ -183,8 +174,8 @@ def flattener(image, pts, w, h):
             temp_rect[2] = pts[2][0] # Bottom right
             temp_rect[3] = pts[1][0] # Bottom left
 
-    max_width = 60
-    max_height = 90
+    max_width = 100
+    max_height = 150
 
     # Create destination array, calculate perspective transform matrix,
     # and warp card image
@@ -229,7 +220,7 @@ if __name__ == '__main__':
                     # Create a card object from the contour and append it to the list of cards.
                     # preprocess_card function takes the card contour and contour and
                     # determines the cards properties (corner points, etc). It generates a
-                    # flattened 200x300 image of the card, and isolates the card's
+                    # flattened image of the card, and isolates the card's
                     # suit and rank from the image.
                     cards.append(preprocess_card(cnts_sort[i],img))
 
@@ -242,7 +233,7 @@ if __name__ == '__main__':
                 temp_cnts = []
                 for j,_ in enumerate(cards):
                     temp_cnts.append(cards[j].contour)
-                cv.drawContours(img,temp_cnts, -1, (255,0,0), 2)
+                cv.drawContours(img,temp_cnts, -1, (0,255,0), 2)
 
 
         # Show in FullScreen Window
@@ -254,9 +245,18 @@ if __name__ == '__main__':
         # img_matrix = cv.resize(img_matrix, (800, 480))
         # cv.imshow("window", img_matrix)
 
+        # Show Threshold Image
+        cv.imshow("Threshold", cv.resize(pre_proc, (400,240)))
+
+        # Show Card Detection
+        cv.imshow("CardDetection", cv.resize(img, (400,240)))
+
+        # Show max. 5 Flatten Images
         for num, card in enumerate(cards):
             if num == 0:
                 img_flatten = card.warp
+            if num > 5:
+                pass
             else:
                 img_flatten = np.hstack((img_flatten, card.warp))
         cv.imshow("FlattenCards", img_flatten)
