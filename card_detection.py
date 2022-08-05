@@ -78,7 +78,7 @@ def find_cards(thresh_image):
         approx = cv.approxPolyDP(cnts_sort[i],0.01*peri,True)
         
         if ((size < CARD_MAX_AREA) and (size > CARD_MIN_AREA) and 
-            (hier_sort[i][3] == -1): # and (len(approx) == 4)):
+            (hier_sort[i][3] == -1)): # and (len(approx) == 4)):
             cnt_is_card[i] = 1
 
     return cnts_sort, cnt_is_card
