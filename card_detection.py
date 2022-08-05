@@ -13,8 +13,8 @@ CARD_THRESH = 30
 CORNER_WIDTH = 32
 CORNER_HEIGHT = 84
 
-CARD_MAX_AREA = 200000
-CARD_MIN_AREA = 2000
+CARD_MAX_AREA = 120000
+CARD_MIN_AREA = 10000
 
 
 ### Structures to hold query card and train card information ###
@@ -77,8 +77,12 @@ def find_cards(thresh_image):
         peri = cv.arcLength(cnts_sort[i],True)
         approx = cv.approxPolyDP(cnts_sort[i],0.01*peri,True)
         
-        if ((size < CARD_MAX_AREA) and (size > CARD_MIN_AREA) and 
-            (hier_sort[i][3] == -1)): # and (len(approx) == 4)):
+        if (
+            (size < CARD_MAX_AREA) and
+            (size > CARD_MIN_AREA) and
+            hier_sort[i][3] == -1 and
+            len(approx) == 4
+        ):
             cnt_is_card[i] = 1
 
     return cnts_sort, cnt_is_card
