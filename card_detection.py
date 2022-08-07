@@ -245,11 +245,12 @@ if __name__ == '__main__':
         # Show max. 5 Flatten img_raws
         for num, card in enumerate(QCards):
             if num == 0:
-                img_flatten = card.warp
+                img_flatten = cv.resize(card.warp, (100, 150))
             if num > 5:
                 pass
             else:
-                img_flatten = np.hstack((img_flatten, card.warp))
+                img_flatten = np.hstack(
+                    (img_flatten, cv.resize(card.warp, (100, 150))))
         cv.imshow("FlattenCards", img_flatten)
 
         key = cv.waitKey(1) & 0xFF
