@@ -262,7 +262,7 @@ if __name__ == '__main__':
         # Show max. 5 Flatten img_raws
 
 
-        img_flatten = np.zeros((WIN_FLATTEN_W, WIN_FLATTEN_H, 3))
+        img_flatten = np.zeros((WIN_FLATTEN_H, WIN_FLATTEN_W, 3))
         for num, card in enumerate(QCards):
             if num == 0:
                 img_flatten = cv.resize(card.warp, (WIN_FLATTEN_W, WIN_FLATTEN_H))
