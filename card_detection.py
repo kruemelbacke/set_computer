@@ -1,7 +1,8 @@
-# Import necessary packages
+import time
+
 import numpy as np
 import cv2 as cv
-import time
+
 
 ### Constants ###
 BIN_THRESHOLD = 128
