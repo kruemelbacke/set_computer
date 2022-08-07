@@ -1,3 +1,4 @@
+import time
 from threading import Thread
 import cv2 as cv
 from picamera.array import PiRGBArray
