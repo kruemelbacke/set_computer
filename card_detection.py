@@ -237,6 +237,13 @@ def flattener(raw, pts, w, h):
 if __name__ == '__main__':
     from camera_stream import CCameraStream
 
+    # Constants
+    WIN_FLATTEN_W = 50
+    WIN_FLATTEN_H = 75
+
+    WIN_BIG_W = 600
+    WIN_BIG_H = 360
+
     CamStream = CCameraStream(res=(1280, 720), fps=10)
     CamStream.run()
 
@@ -246,20 +253,22 @@ if __name__ == '__main__':
         #                 set_computer\\Imgs\\2022-08-05_11-16-12.png")
 
         QCards, img_found_cards, img_thresh = get_qcards_from_img(img_raw)
-
         # Show Threshold img_raw
-        cv.imshow("Threshold", cv.resize(img_thresh, (600, 360)))
+        cv.imshow("Threshold", cv.resize(img_thresh, (WIN_BIG_W, WIN_BIG_H)))
 
         # Show Card Detection
-        cv.imshow("CardDetection", cv.resize(img_found_cards, (600, 360)))
+        cv.imshow("CardDetection", cv.resize(img_found_cards, (WIN_BIG_W, WIN_BIG_H)))
 
         # Show max. 5 Flatten img_raws
+
+
+        img_flatten = np.zeros((WIN_FLATTEN_W, WIN_FLATTEN_H, 3))
         for num, card in enumerate(QCards):
             if num == 0:
-                img_flatten = cv.resize(card.warp, (50, 75))
+                img_flatten = cv.resize(card.warp, (WIN_FLATTEN_W, WIN_FLATTEN_H))
             elif num < 12:
                 img_flatten = np.hstack(
-                    (img_flatten, cv.resize(card.warp, (50, 75))))
+                    (img_flatten, cv.resize(card.warp, (WIN_FLATTEN_W, WIN_FLATTEN_H))))
 
         cv.imshow("FlattenCards", img_flatten)
 
