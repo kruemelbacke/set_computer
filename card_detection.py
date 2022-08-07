@@ -29,10 +29,10 @@ def get_qcards_from_img(raw):
     grey, blur, thresh = preprocess_img_raw(raw)
 
     # Find and sort the contours of all cards in the img_raw (query cards)
-    qcards = find_cards(thresh, raw)
+    qcards, all_cnts = find_cards(thresh, raw)
 
     # Draw center point on the img_raw.
-    img_of_found_cards = draw_results(img_raw, qcards)
+    img_of_found_cards = draw_results(img_raw, qcards, all_cnts)
 
     return qcards, img_of_found_cards, thresh
 
@@ -101,7 +101,7 @@ def find_cards(thresh, raw):
             # flattened raw of the card
             qcards.append(preprocess_card(ctr, raw))
 
-    return qcards
+    return qcards, cnts
 
 
 def preprocess_card(contour, raw):
@@ -135,7 +135,7 @@ def preprocess_card(contour, raw):
     return qcard
 
 
-def draw_results(raw, qcards):
+def draw_results(raw, qcards, all_ctrs):
     """Draw the card name, center point, and contour on the camera img_raw."""
     font = cv.FONT_HERSHEY_SIMPLEX
     
@@ -150,6 +150,9 @@ def draw_results(raw, qcards):
                 (x-60, y-10), font, 1, (0, 0, 0), 3, cv.LINE_AA)
         cv.putText(raw, (f"Size:{qcard.area}"),
                 (x-60, y-10), font, 1, (50, 200, 200), 2, cv.LINE_AA)
+
+    # Draw all detected contours (for debugging)
+    cv.drawContours(raw,all_ctrs, -1, (255,0,0), 1)
 
     # Draw card contours on image (have to do contours all at once or
     # they do not show up properly for some reason)
