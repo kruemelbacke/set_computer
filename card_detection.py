@@ -46,7 +46,7 @@ def preprocess_img_raw(raw):
     thresh_val, thresh = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
 
     # Detect edges using Canny
-    thresh = cv.Canny(thresh, thresh_val, thresh_val * 2)
+    # thresh = cv.Canny(thresh, thresh_val, thresh_val * 2)
 
     return grey, blur, thresh
 
