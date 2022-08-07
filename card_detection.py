@@ -91,8 +91,8 @@ def find_cards(thresh, raw):
         if (
             (size < CARD_MAX_AREA) and
             (size > CARD_MIN_AREA) and
-            hier_sort[i][3] == -1 and
-            len(approx) == 4
+            hier_sort[i][3] == -1 # and
+            # len(approx) == 4
         ):
             # Create a card object from the contour and append it to
             # the list of cards. preprocess_card function takes the
