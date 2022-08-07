@@ -152,7 +152,7 @@ def draw_results(raw, qcards, all_ctrs):
                 (x-60, y-10), font, 1, (50, 200, 200), 2, cv.LINE_AA)
 
     # Draw all detected contours (for debugging)
-    cv.drawContours(raw,all_ctrs, -1, (255,0,0), 1)
+    cv.drawContours(raw,all_ctrs, -1, (255,0,0), 2)
 
     # Draw card contours on image (have to do contours all at once or
     # they do not show up properly for some reason)
