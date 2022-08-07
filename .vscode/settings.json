@@ -1,6 +1,7 @@
 {
-    "python.linting.pylintEnabled": false,
+    "python.linting.pylintEnabled": true,
     "python.linting.enabled": true,
     "editor.rulers": [79],
-    "python.linting.pycodestyleEnabled": true
+    "python.linting.pycodestyleEnabled": false,
+    "python.linting.pylintArgs":["--extension-pkg-whitelist=cv2"]
 }
