@@ -157,7 +157,7 @@ def draw_results(raw, qcards):
         cv.drawContours(raw,temp_cnts, -1, (0,255,0), 2)
 
     cv.putText(raw, (f"Detected Cards: {len(qcards)}"),
-            (3, 10), font, 1, (255, 255, 0), 2, cv.LINE_AA)
+            (3, 24), font, 1, (255, 255, 0), 2, cv.LINE_AA)
 
     return raw
 
