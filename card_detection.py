@@ -140,15 +140,20 @@ def draw_results(raw, qcards):
         y = qcard.center[1]
         cv.circle(raw, (x, y), 5, (0, 255, 0), -1)
 
-        # Draw Card Contour
-        cv.drawContours(raw, qcard.contour, -1, (255, 0, 0), 2)
-
         # Draw text twice, so letters have black outline
         font = cv.FONT_HERSHEY_SIMPLEX
         cv.putText(raw, (f"Size:{qcard.area}"),
                 (x-60, y-10), font, 1, (0, 0, 0), 3, cv.LINE_AA)
         cv.putText(raw, (f"Size:{qcard.area}"),
                 (x-60, y-10), font, 1, (50, 200, 200), 2, cv.LINE_AA)
+
+    # Draw card contours on image (have to do contours all at once or
+    # they do not show up properly for some reason)
+    if len(qcards) > 0:
+        temp_cnts = []
+        for qcard in qcards:
+            temp_cnts.append(qcard.contour)
+        cv.drawContours(raw,temp_cnts, -1, (0,255,0), 2)
 
     return raw
 
