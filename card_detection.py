@@ -41,7 +41,7 @@ def preprocess_img_raw(raw):
     """Returns a grayed, img_blurred and thresholded img """
 
     grey = cv.cvtColor(raw, cv.COLOR_BGR2GRAY)
-    blur = cv.GaussianBlur(grey, (5, 5), 0)
+    blur = cv.GaussianBlur(grey, (9, 9), 0)
 
     thresh_val, thresh = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
 
