@@ -89,10 +89,11 @@ def find_cards(thresh, raw):
         # 4) have four corners
 
         if (
-            (size < CARD_MAX_AREA) and
-            (size > CARD_MIN_AREA) and
-            hier_sort[i][3] == -1 and
-            len(approx) == 4
+            (size < CARD_MAX_AREA)
+            and (size > CARD_MIN_AREA)
+            and hier_sort[i][3] == -1
+            and len(approx) == 4
+            and cv.isContourConvex(ctr)
         ):
             # Create a card object from the contour and append it to
             # the list of cards. preprocess_card function takes the
