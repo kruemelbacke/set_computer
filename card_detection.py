@@ -43,7 +43,10 @@ def preprocess_img_raw(raw):
     grey = cv.cvtColor(raw, cv.COLOR_BGR2GRAY)
     blur = cv.GaussianBlur(grey, (5, 5), 0)
 
-    _, thresh = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
+    thresh_val, thresh = cv.threshold(blur, 0, 255, cv.THRESH_BINARY + cv.THRESH_OTSU)
+
+    # Detect edges using Canny
+    thresh = cv.Canny(thresh, thresh_val, thresh_val * 2)
 
     return grey, blur, thresh
 
