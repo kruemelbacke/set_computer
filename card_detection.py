@@ -81,6 +81,8 @@ def find_cards(thresh, raw):
         size = cv.contourArea(ctr)
         peri = cv.arcLength(ctr, True)
         approx = cv.approxPolyDP(ctr, 0.1*peri, True)
+            # Find perimeter of card and use it to approximate corner points
+        
         # Determine which of the contours are cards by applying the
         # following criteria:
         # 1) Smaller area than the maximum card size
@@ -99,25 +101,21 @@ def find_cards(thresh, raw):
             # card contour and contour and determines the cards
             # properties (corner points, etc). It generates a
             # flattened raw of the card
-            qcards.append(preprocess_card(ctr, raw))
+            qcards.append(preprocess_card(ctr, raw, np.float32(approx)))
 
     return qcards, cnts
 
 
-def preprocess_card(contour, raw):
+def preprocess_card(contour, raw, pts):
     """Uses contour to find information about the query card."""
 
     # Initialize new Query_card object
     qcard = CQueryCard()
 
+    qcard.corner_pts = pts
+
     qcard.contour = contour
     qcard.area = cv.contourArea(contour)
-
-    # Find perimeter of card and use it to approximate corner points
-    peri = cv.arcLength(contour, True)
-    approx = cv.approxPolyDP(contour, 0.01*peri, True)
-    pts = np.float32(approx)
-    qcard.corner_pts = pts
 
     # Find width and height of card's bounding rectangle
     _, _, w, h = cv.boundingRect(contour)
