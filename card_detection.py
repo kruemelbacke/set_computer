@@ -246,11 +246,10 @@ if __name__ == '__main__':
         for num, card in enumerate(QCards):
             if num == 0:
                 img_flatten = cv.resize(card.warp, (100, 150))
-            if num > 5:
-                pass
-            else:
+            elif num < 6:
                 img_flatten = np.hstack(
                     (img_flatten, cv.resize(card.warp, (100, 150))))
+
         cv.imshow("FlattenCards", img_flatten)
 
         key = cv.waitKey(1) & 0xFF
