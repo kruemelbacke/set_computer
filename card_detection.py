@@ -160,7 +160,7 @@ def draw_results(raw, qcards, all_ctrs):
         temp_cnts = []
         for qcard in qcards:
             temp_cnts.append(qcard.contour)
-        cv.drawContours(raw,temp_cnts, -1, (0,255,0), 2)
+        cv.drawContours(raw,temp_cnts, -1, (0,255,0), 3)
 
     cv.putText(raw, (f"Detected Cards: {len(qcards)}"),
             (3, 24), font, 1, (255, 255, 0), 2, cv.LINE_AA)
