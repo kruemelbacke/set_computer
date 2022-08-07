@@ -80,7 +80,7 @@ def find_cards(thresh, raw):
     for i, ctr in enumerate(cnts_sort):
         size = cv.contourArea(ctr)
         peri = cv.arcLength(ctr, True)
-        approx = cv.approxPolyDP(ctr, 0.1*peri, True)
+        approx = cv.approxPolyDP(ctr, 0.05*peri, True)
         # Determine which of the contours are cards by applying the
         # following criteria:
         # 1) Smaller area than the maximum card size
@@ -93,7 +93,6 @@ def find_cards(thresh, raw):
             and (size > CARD_MIN_AREA)
             and hier_sort[i][3] == -1
             and len(approx) == 4
-            # and cv.isContourConvex(ctr)
         ):
             # Create a card object from the contour and append it to
             # the list of cards. preprocess_card function takes the
