@@ -134,13 +134,15 @@ def preprocess_card(contour, raw):
 
 def draw_results(raw, qcards):
     """Draw the card name, center point, and contour on the camera img_raw."""
+    font = cv.FONT_HERSHEY_SIMPLEX
+    
     for qcard in qcards:
         x = qcard.center[0]
         y = qcard.center[1]
         cv.circle(raw, (x, y), 5, (0, 255, 0), -1)
 
         # Draw text twice, so letters have black outline
-        font = cv.FONT_HERSHEY_SIMPLEX
+        
         cv.putText(raw, (f"Size:{qcard.area}"),
                 (x-60, y-10), font, 1, (0, 0, 0), 3, cv.LINE_AA)
         cv.putText(raw, (f"Size:{qcard.area}"),
@@ -153,6 +155,9 @@ def draw_results(raw, qcards):
         for qcard in qcards:
             temp_cnts.append(qcard.contour)
         cv.drawContours(raw,temp_cnts, -1, (0,255,0), 2)
+
+    cv.putText(raw, (f"Detected Cards: {len(qcards)}"),
+            (3, 10), font, 1, (255, 255, 0), 2, cv.LINE_AA)
 
     return raw
 
