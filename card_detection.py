@@ -80,7 +80,7 @@ def find_cards(thresh, raw):
     for i, ctr in enumerate(cnts_sort):
         size = cv.contourArea(ctr)
         peri = cv.arcLength(ctr, True)
-        approx = cv.approxPolyDP(ctr, 0.05*peri, True)
+        approx = cv.approxPolyDP(ctr, 0.1*peri, True)
         # Determine which of the contours are cards by applying the
         # following criteria:
         # 1) Smaller area than the maximum card size
@@ -89,10 +89,10 @@ def find_cards(thresh, raw):
         # 4) have four corners
 
         if (
-            (size < CARD_MAX_AREA)
-            and (size > CARD_MIN_AREA)
-            and hier_sort[i][3] == -1
-            and len(approx) == 4
+            (size < CARD_MAX_AREA) and
+            (size > CARD_MIN_AREA) and
+            hier_sort[i][3] == -1 and
+            len(approx) == 4
         ):
             # Create a card object from the contour and append it to
             # the list of cards. preprocess_card function takes the
@@ -252,8 +252,6 @@ if __name__ == '__main__':
 
         # Show Card Detection
         cv.imshow("CardDetection", cv.resize(img_found_cards, (600, 360)))
-
-        img_flatten = np.zeros(100, 150)
 
         # Show max. 5 Flatten img_raws
         for num, card in enumerate(QCards):
