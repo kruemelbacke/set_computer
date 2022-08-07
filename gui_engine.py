@@ -4,7 +4,8 @@ blblblblbl
 import pygame
 
 
-class GUI():
+class CGui:
+    """GUI Class"""
     def __init__(self):
         """
         Inits GUI
@@ -73,5 +74,5 @@ class GUI():
 
 
 if __name__ == '__main__':
-    myGUI = GUI()
+    myGUI = CGui()
     myGUI.run()

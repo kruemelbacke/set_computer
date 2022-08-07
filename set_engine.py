@@ -24,24 +24,15 @@ class Card():
     get_...:
         returns attribute value
     """
-    def __init__(self, position, number, symbol, shading, color):
+    def __init__(self, number, symbol, shading, color):
         if not (
-            isinstance(position, list)
-            and len(position) == 2
-            and isinstance(position[0], int)
-            and position[0] >= 0
-            and position[0] <= 2
-            and isinstance(position[1], int)
-            and position[1] >= 0
-            and position[1] <= 6
-            and number in possible_attributes["number"]
+            number in possible_attributes["number"]
             and symbol in possible_attributes["symbol"]
             and shading in possible_attributes["shading"]
             and color in possible_attributes["color"]
         ):
             raise ValueError
 
-        self.__position = position  # [x, y]
         self.__attributes = {
             "number": number,
             "symbol": symbol,
@@ -62,13 +53,7 @@ class Card():
         """
         Get all attributes as a dict and position
         """
-        return self.__attributes, self.__position
-
-    def get_position(self):
-        """
-        Get position of the card
-        """
-        return self.__position
+        return self.__attributes
 
     def get_number(self):
         """
@@ -93,12 +78,6 @@ class Card():
         Get color of the symbol
         """
         return self.__attributes["color"]
-
-    def set_position(self, new_position):
-        """
-        Set position of card e.g. for updating after SET finding
-        """
-        self.__position = new_position
 
 
 def check_val(val1, val2, val3):

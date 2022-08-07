@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import set_engine as se
 
 
-class GameField():
+class CGameField():
     """
     A class to represent the playing field filled with cards
     """
@@ -30,7 +30,7 @@ class GameField():
                 for shading in se.possible_attributes["shading"]:
                     for color in se.possible_attributes["color"]:
                         card_deck.append(se.Card(
-                            [0, 0], number, symbol, shading, color))
+                            number, symbol, shading, color))
         self.__card_deck = card_deck
 
     def get_field_cards(self):
@@ -80,7 +80,7 @@ def play_game(verbose_output=False):
     Play one game and return number of during game found SETs
     """
     # init game
-    myfield = GameField()
+    myfield = CGameField()
     if verbose_output is False:
         myfield.count_cards()
     myfield.pick_random_cards(12)

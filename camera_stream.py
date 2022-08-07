@@ -4,7 +4,7 @@ from picamera.array import PiRGBArray
 from picamera import PiCamera
 
 
-class CameraStream:
+class CCameraStream:
     """Camera Stream"""
     def __init__(self, res=(640, 480), fps=30):
         self.camera = PiCamera()
@@ -23,6 +23,8 @@ class CameraStream:
         """Start Stream as Thread"""
         self.running = True
         Thread(target=self.__update, args=()).start()
+        # Wat for camera to 'warm up'
+        time.sleep(2)
 
     def __update(self):
         """Update frame buffer"""
@@ -49,7 +51,7 @@ if __name__ == '__main__':
     from datetime import datetime
     import time
 
-    CamStream = CameraStream(res=(1280, 720), fps=10)
+    CamStream = CCameraStream(res=(1280, 720), fps=10)
     CamStream.run()
     time.sleep(2)
 
