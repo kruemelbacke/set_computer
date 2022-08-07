@@ -142,6 +142,9 @@ def draw_results(raw, qcards):
         y = qcard.center[1]
         cv.circle(raw, (x, y), 5, (0, 255, 0), -1)
 
+        # Draw Card Contour
+        cv.drawContours(raw, qcard.contour, -1, (255, 0, 0), 2)
+
         # Draw text twice, so letters have black outline
         font = cv.FONT_HERSHEY_SIMPLEX
         cv.putText(raw, (f"Size:{qcard.area}"),
