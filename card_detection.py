@@ -80,7 +80,7 @@ def find_cards(thresh, raw):
     for i, ctr in enumerate(cnts_sort):
         size = cv.contourArea(ctr)
         peri = cv.arcLength(ctr, True)
-        approx = cv.approxPolyDP(ctr, 0.1*peri, True)
+        approx = cv.approxPolyDP(ctr, 0.05*peri, True)
         # Determine which of the contours are cards by applying the
         # following criteria:
         # 1) Smaller area than the maximum card size
