@@ -248,10 +248,10 @@ if __name__ == '__main__':
         QCards, img_found_cards, img_thresh = get_qcards_from_img(img_raw)
 
         # Show Threshold img_raw
-        cv.imshow("Threshold", cv.resize(img_thresh, (400, 240)))
+        cv.imshow("Threshold", cv.resize(img_thresh, (600, 360)))
 
         # Show Card Detection
-        cv.imshow("CardDetection", cv.resize(img_found_cards, (400, 240)))
+        cv.imshow("CardDetection", cv.resize(img_found_cards, (600, 360)))
 
         # Show max. 5 Flatten img_raws
         for num, card in enumerate(QCards):
