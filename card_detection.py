@@ -26,7 +26,7 @@ class CQueryCard:
 def get_qcards_from_img(raw):
     """Main Function of Module"""
     # Pre-process camera img_raw
-    thresh = preprocess_img_raw(raw)
+    grey, blur, thresh = preprocess_img_raw(raw)
 
     # Find and sort the contours of all cards in the img_raw (query cards)
     qcards = find_cards(thresh, raw)
@@ -40,20 +40,19 @@ def get_qcards_from_img(raw):
 def preprocess_img_raw(raw):
     """Returns a grayed, img_blurred and thresholded img """
 
-    gray = cv.cvtColor(raw, cv.COLOR_BGR2GRAY)
-    blur = cv.GaussianBlur(gray, (5, 5), 0)
+    grey = cv.cvtColor(raw, cv.COLOR_BGR2GRAY)
+    blur = cv.GaussianBlur(grey, (5, 5), 0)
 
     _, thresh = cv.threshold(blur, BIN_THRESHOLD, 255, cv.THRESH_BINARY)
 
-    return gray, blur, thresh
+    return grey, blur, thresh
 
 
 def find_cards(thresh, raw):
     """Finds all card-sized contours"""
 
     # Find contours and sort their indices by contour size
-    cnts, hier = cv.findContours(
-        thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    cnts, hier = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
     index_sort = sorted(
         range(len(cnts)), key=lambda i: cv.contourArea(cnts[i]), reverse=True
         )
