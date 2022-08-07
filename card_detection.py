@@ -93,7 +93,7 @@ def find_cards(thresh, raw):
             and (size > CARD_MIN_AREA)
             and hier_sort[i][3] == -1
             and len(approx) == 4
-            and cv.isContourConvex(ctr)
+            # and cv.isContourConvex(ctr)
         ):
             # Create a card object from the contour and append it to
             # the list of cards. preprocess_card function takes the
@@ -253,6 +253,8 @@ if __name__ == '__main__':
 
         # Show Card Detection
         cv.imshow("CardDetection", cv.resize(img_found_cards, (600, 360)))
+
+        img_flatten = np.zeros(100, 150)
 
         # Show max. 5 Flatten img_raws
         for num, card in enumerate(QCards):
