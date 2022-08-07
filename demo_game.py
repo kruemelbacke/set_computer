@@ -6,6 +6,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import set_engine as se
 
+
 class GameField():
     """
     A class to represent the playing field filled with cards
@@ -29,7 +30,7 @@ class GameField():
                 for shading in se.possible_attributes["shading"]:
                     for color in se.possible_attributes["color"]:
                         card_deck.append(se.Card(
-                            [0,0], number, symbol, shading, color))
+                            [0, 0], number, symbol, shading, color))
         self.__card_deck = card_deck
 
     def get_field_cards(self):
@@ -44,7 +45,7 @@ class GameField():
         """
         if len(self.__card_deck) <= 0:
             return False
-        for i in range(quantity): # pylint: disable=unused-variable
+        for i in range(quantity):  # pylint: disable=unused-variable
             random_card = random.choice(self.__card_deck)
             self.__field_cards.append(random_card)
             self.__card_deck.remove(random_card)
@@ -73,9 +74,10 @@ class GameField():
         for card in cards:
             self.__field_cards.remove(card)
 
+
 def play_game(verbose_output=False):
     """
-    Play one game and return number of during game found SETs 
+    Play one game and return number of during game found SETs
     """
     # init game
     myfield = GameField()
@@ -92,7 +94,7 @@ def play_game(verbose_output=False):
             myfield.count_cards()
         set_list = se.find_set_primitive_loop(myfield.get_field_cards())
         if len(set_list) > 0:
-        # found a SET
+            # found a SET
             set_counter += 1
             if verbose_output is False:
                 se.show_cards(set_list)
@@ -103,7 +105,7 @@ def play_game(verbose_output=False):
                 if myfield.pick_random_cards(3) is False:
                     break
         else:
-        # no SET found
+            # no SET found
             if myfield.pick_random_cards(3) is False:
                 break
 
@@ -113,13 +115,13 @@ def play_game(verbose_output=False):
             myfield.count_cards()
         set_list = se.find_set_primitive_loop(myfield.get_field_cards())
         if len(set_list) > 0:
-        # found a SET
+            # found a SET
             set_counter += 1
             if verbose_output is False:
                 se.show_cards(set_list)
             myfield.remove_field_cards(set_list)
         else:
-        # no SET found
+            # no SET found
             break
 
     # Game finished
@@ -127,16 +129,18 @@ def play_game(verbose_output=False):
         print("Game finished after "+str(set_counter)+" found SETs")
     return set_counter
 
+
 def play_games_and_plot_histogram(number_of_games):
     """
     Play 'number_of_games' times and plot histogram of found SETs in each game
     """
     number_of_found_sets = []
-    for i in tqdm(range(number_of_games)): # pylint: disable=unused-variable
+    for i in tqdm(range(number_of_games)):  # pylint: disable=unused-variable
         number_of_found_sets.append(play_game(verbose_output=True))
     plt.hist(number_of_found_sets)
     plt.title("Number of found SETs ("+str(number_of_games)+" games)")
     plt.show()
+
 
 if __name__ == '__main__':
     play_games_and_plot_histogram(1000)

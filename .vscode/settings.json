@@ -1,5 +1,6 @@
 {
-    "python.linting.pylintEnabled": true,
+    "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
-    "editor.rulers": [79]
+    "editor.rulers": [79],
+    "python.linting.pycodestyleEnabled": true
 }

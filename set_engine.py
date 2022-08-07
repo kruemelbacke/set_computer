@@ -3,11 +3,12 @@ This module represents the game itself with card and rules
 """
 
 possible_attributes = {
-    "number" : [1,2,3],
-    "symbol" : ["oval", "diamond", "wave"],
-    "shading" : ["empty", "hatched", "solid"],
-    "color" : ["red", "green", "purple"]
+    "number": [1, 2, 3],
+    "symbol": ["oval", "diamond", "wave"],
+    "shading": ["empty", "hatched", "solid"],
+    "color": ["red", "green", "purple"]
 }
+
 
 class Card():
     """
@@ -40,13 +41,12 @@ class Card():
         ):
             raise ValueError
 
-
-        self.__position = position # [x, y]
+        self.__position = position  # [x, y]
         self.__attributes = {
-            "number" : number,
-            "symbol" : symbol,
+            "number": number,
+            "symbol": symbol,
             "shading": shading,
-            "color"  : color
+            "color": color
         }
 
     def __eq__(self, other):
@@ -100,6 +100,7 @@ class Card():
         """
         self.__position = new_position
 
+
 def check_val(val1, val2, val3):
     """
     Check if values are all equal or all different
@@ -109,10 +110,11 @@ def check_val(val1, val2, val3):
     """
     if val1 == val2 and val1 == val3:
         return True
-    if val1 != val2 and val1!= val3 and val2 != val3:
+    if val1 != val2 and val1 != val3 and val2 != val3:
         return True
 
     return False
+
 
 def is_a_set(card1, card2, card3):
     """
@@ -138,6 +140,7 @@ def is_a_set(card1, card2, card3):
 
     return True
 
+
 def find_set_primitive_loop(cards):
     """
     xx
@@ -151,10 +154,9 @@ def find_set_primitive_loop(cards):
                     if card1 == card2 or card1 == card3 or card2 == card3:
                         continue
                     if is_a_set(card1, card2, card3):
-                        # print("Found a SET after "+str(counter)+" attempts\n")
                         return [card1, card2, card3]
-    # print("No SET found after "+str(counter)+" attempts\n")
     return []
+
 
 def show_cards(cards):
     """
