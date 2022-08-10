@@ -24,9 +24,9 @@ class CQueryCard(set_engine.CCard):
         self.width, self.height = 0, 0  # Width and height of card
         self.corner_pts = []  # Corner points of card
         self.center = []  # Center point of card
-        self.flatten = []  # 200x300, flattened img_raw
-        self.flatten_thresh = []
-        self.flatten_masked = []
+        self.warp = []  # 200x300, flattened img_raw
+        self.warp_thresh = []
+        self.warp_masked = []
 
 
 def get_cards_from_img(raw):
@@ -48,7 +48,7 @@ def get_cards_from_img(raw):
 def determine_attributes(cards):
     """ Determines attributes of given qcards """
     for card in cards:
-        card.flatten_thresh, card.flatten_masked = preprocess_card_img(card.flatten)
+        card.warp_thresh, card.warp_masked = preprocess_card_img(card.warp)
 
 def preprocess_card_img(flatten):
     grey = cv.cvtColor(flatten, cv.COLOR_BGR2GRAY)
@@ -149,7 +149,7 @@ def preprocess_card(contour, raw, pts):
     qcard.center = [cent_x, cent_y]
 
     # Warp card into 200x300 flattened img_raw using perspective transform
-    qcard.flatten = flattener(raw, pts, w, h)
+    qcard.warp = flattener(raw, pts, w, h)
 
     return qcard
 
@@ -244,13 +244,13 @@ def flattener(raw, pts, w, h):
     max_height = 300
 
     # Create destination array, calculate perspective transform matrix,
-    # and flatten card img_raw
+    # and warp card img_raw
     dst = np.array([[0, 0], [max_width-1, 0], [max_width-1, max_height-1],
                    [0, max_height-1]], np.float32)
     transform_m = cv.getPerspectiveTransform(temp_rect, dst)
-    flatten = cv.flattenPerspective(raw, transform_m, (max_width, max_height))
+    warp = cv.warpPerspective(raw, transform_m, (max_width, max_height))
 
-    return flatten
+    return warp
 
 
 if __name__ == '__main__':
@@ -289,17 +289,17 @@ if __name__ == '__main__':
 
         for num, card in enumerate(Cards):
             if num == 0:
-                img_flatten = cv.resize(card.flatten, (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                img_flatten_thresh = cv.resize(card.flatten_thresh, (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                img_flatten_masked = cv.resize(card.flatten_masked, (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                img_flatten = cv.resize(card.warp, (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                img_flatten_thresh = cv.resize(card.warp_thresh, (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                img_flatten_masked = cv.resize(card.warp_masked, (WIN_FLATTEN_W, WIN_FLATTEN_H))
 
             else:
                 img_flatten = np.hstack(
-                    (img_flatten, cv.resize(card.flatten, (WIN_FLATTEN_W, WIN_FLATTEN_H))))
+                    (img_flatten, cv.resize(card.warp, (WIN_FLATTEN_W, WIN_FLATTEN_H))))
                 img_flatten_thresh = np.hstack(
-                    (img_flatten_thresh, cv.resize(card.flatten_thresh, (WIN_FLATTEN_W, WIN_FLATTEN_H))))
+                    (img_flatten_thresh, cv.resize(card.warp_thresh, (WIN_FLATTEN_W, WIN_FLATTEN_H))))
                 img_flatten_masked = np.hstack(
-                    (img_flatten_masked, cv.resize(card.flatten_masked, (WIN_FLATTEN_W, WIN_FLATTEN_H))))
+                    (img_flatten_masked, cv.resize(card.warp_masked, (WIN_FLATTEN_W, WIN_FLATTEN_H))))
 
         cv.imshow("FlattenCards", img_flatten)
         cv.imshow("FlattenCards Thresh", img_flatten_thresh)
