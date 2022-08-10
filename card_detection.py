@@ -48,15 +48,30 @@ def get_cards_from_img(raw):
 def determine_attributes(cards):
     """ Determines attributes of given qcards """
     for card in cards:
-        card.warp_thresh, card.warp_masked = preprocess_card_img(card.warp)
+        preprocess_card_img(card)
 
-def preprocess_card_img(flatten):
+def preprocess_card_img(card):
+    flatten = card.warp
     grey = cv.cvtColor(flatten, cv.COLOR_BGR2GRAY)
-    thresh_val, thresh = cv.threshold(grey, 0, 255, cv.THRESH_BINARY_INV + cv.THRESH_OTSU, )
-    # Mask the result with the original image
-    masked = cv.bitwise_and(flatten, flatten, mask = thresh)
+    thresh_val, thresh = cv.threshold(grey, 0, 255, cv.THRESH_BINARY_INV + cv.THRESH_OTSU)
 
-    return thresh, masked
+    # get largest contour
+    contours = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    contours = contours[0] if len(contours) == 2 else contours[1]
+    
+
+    # draw filled contour on black background
+    mask = np.zeros_like(flatten)
+    
+    # big_contour = max(contours, key=cv.contourArea)
+    # cv.drawContours(mask, [big_contour], 0, (255,255,255), -1)
+
+    # apply mask to input image
+    masked_img = cv.bitwise_and(flatten, mask)
+
+    card.warp_thresh = thresh
+    card.warp_masked = masked_img
+
 
 def preprocess_img_raw(raw):
     """Returns a grayed, img_blurred and thresholded img """
