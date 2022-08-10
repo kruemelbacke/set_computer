@@ -137,6 +137,13 @@ def find_set_primitive_loop(cards):
                         return [card1, card2, card3]
     return []
 
+def find_set_cnn(cards):
+    """
+    Returns a list of 3 cards representing a SET
+    or an empty list if no SET was found
+    using a CNN
+    """
+    pass
 
 def show_cards(cards):
     """
