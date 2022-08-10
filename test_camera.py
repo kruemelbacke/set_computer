@@ -1,9 +1,9 @@
-from camera_stream import CameraStream
+from camera_stream import CCameraStream
 import cv2 as cv
 import time
 
 
-CamStream = CameraStream(res=(1280, 720), fps=10)
+CamStream = CCameraStream(res=(1280, 720), fps=10)
 CamStream.run()
 
 time.sleep(3)
