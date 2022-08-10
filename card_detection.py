@@ -58,7 +58,7 @@ def preprocess_card_img(card):
     # get largest contour
     contours, hier = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
     
-    # contours = contours[0] if len(contours) == 2 else contours[1]
+    contours = contours[0] if len(contours) == 2 else contours[1]
 
     card.attributes["number"] = len(contours)
     # draw filled contour on black background
