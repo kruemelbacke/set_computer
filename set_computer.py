@@ -1,4 +1,3 @@
-import time
 import cv2 as cv
 
 from card_detection import CCardDetector
