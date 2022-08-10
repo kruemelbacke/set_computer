@@ -64,6 +64,7 @@ if __name__ == '__main__':
         cv.setWindowProperty(
             "window", cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
         cv.imshow("window", img)
+        print(f"Made image: {i}")
         time.sleep(1)
 
     CamStream.stop()
