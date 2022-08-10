@@ -12,7 +12,7 @@ CARD_MAX_AREA = 120000
 CARD_MIN_AREA = 10000
 
 
-class CQueryCard(set_engine.Card):
+class CQueryCard(set_engine.CCard):
     """Structure to store information about query cards in the camera img_raw."""
 
     def __init__(self):
