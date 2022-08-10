@@ -243,8 +243,12 @@ if __name__ == '__main__':
     WIN_FLATTEN_W = 50
     WIN_FLATTEN_H = 75
 
-    WIN_BIG_W = 600
-    WIN_BIG_H = 360
+    # WIN_BIG_W = 600
+    # WIN_BIG_H = 360
+
+    WIN_BIG_W = 1280
+    WIN_BIG_H = 720
+
 
     CamStream = CCameraStream(res=(1280, 720), fps=10)
     CamStream.run()
