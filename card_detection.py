@@ -25,9 +25,11 @@ class CQueryCard(set_engine.CCard):
         self.corner_pts = []  # Corner points of card
         self.center = []  # Center point of card
         self.warp = []  # 200x300, flattened img_raw
+        self.warp_thresh = []
+        self.warp_masked = []
 
 
-def get_qcards_from_img(raw):
+def get_cards_from_img(raw):
     """Main Function of Module"""
     # Pre-process camera img_raw
     grey, blur, thresh = preprocess_img_raw(raw)
@@ -35,11 +37,26 @@ def get_qcards_from_img(raw):
     # Find and sort the contours of all cards in the img_raw (query cards)
     qcards, all_cnts = find_cards(thresh, raw)
 
+    determine_attributes(qcards)
+
     # Draw center point on the img_raw.
     img_of_found_cards = draw_results(img_raw, qcards, all_cnts)
 
     return qcards, img_of_found_cards, thresh
 
+
+def determine_attributes(cards):
+    """ Determines attributes of given qcards """
+    for card in cards:
+        card.warp_thresh, card.warp_masked = preprocess_card_img(card.warp)
+
+def preprocess_card_img(flatten):
+    grey = cv.cvtColor(flatten, cv.COLOR_BGR2GRAY)
+    thresh_val, thresh = cv.threshold(grey, 0, 255, cv.THRESH_BINARY_INV + cv.THRESH_OTSU, )
+    # Mask the result with the original image
+    masked = cv.bitwise_and(flatten, flatten, mask = thresh)
+
+    return thresh, masked
 
 def preprocess_img_raw(raw):
     """Returns a grayed, img_blurred and thresholded img """
@@ -258,25 +275,35 @@ if __name__ == '__main__':
         # img = cv.imread("C:\\Users\\Claudio-PC\\Documents\\...
         #                 set_computer\\Imgs\\2022-08-05_11-16-12.png")
 
-        QCards, img_found_cards, img_thresh = get_qcards_from_img(img_raw)
+        Cards, img_found_cards, img_thresh = get_cards_from_img(img_raw)
         # Show Threshold img_raw
         cv.imshow("Threshold", cv.resize(img_thresh, (WIN_BIG_W, WIN_BIG_H)))
 
         # Show Card Detection
         cv.imshow("CardDetection", cv.resize(img_found_cards, (WIN_BIG_W, WIN_BIG_H)))
 
-        # Show max. 5 Flatten img_raws
-
-
         img_flatten = np.zeros((WIN_FLATTEN_H, WIN_FLATTEN_W, 3))
-        for num, card in enumerate(QCards):
+        img_flatten_thresh = np.zeros((WIN_FLATTEN_H, WIN_FLATTEN_W, 1))
+        img_flatten_masked = np.zeros((WIN_FLATTEN_H, WIN_FLATTEN_W, 3))
+
+
+        for num, card in enumerate(Cards):
             if num == 0:
                 img_flatten = cv.resize(card.warp, (WIN_FLATTEN_W, WIN_FLATTEN_H))
-            elif num < 12:
+                img_flatten_thresh = cv.resize(card.warp, (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                img_flatten_masked = cv.resize(card.warp, (WIN_FLATTEN_W, WIN_FLATTEN_H))
+
+            else:
                 img_flatten = np.hstack(
                     (img_flatten, cv.resize(card.warp, (WIN_FLATTEN_W, WIN_FLATTEN_H))))
+                img_flatten_thresh = np.hstack(
+                    (img_flatten_thresh, cv.resize(card.warp, (WIN_FLATTEN_W, WIN_FLATTEN_H))))
+                img_flatten_masked = np.hstack(
+                    (img_flatten_masked, cv.resize(card.warp, (WIN_FLATTEN_W, WIN_FLATTEN_H))))
 
         cv.imshow("FlattenCards", img_flatten)
+        cv.imshow("FlattenCards Thresh", img_flatten_thresh)
+        cv.imshow("FlattenCards Masked", img_flatten_masked)
 
         key = cv.waitKey(1) & 0xFF
 
