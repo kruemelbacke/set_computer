@@ -57,12 +57,15 @@ def preprocess_card_img(card):
 
     # get largest contour
     contours = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    card.attributes["number"] = len(contours)
+    contours = contours[0] if len(contours) == 2 else contours[1]
     
+
     # draw filled contour on black background
     mask = np.zeros_like(flatten)
-    for ctr in contours:
-        # big_contour = max(ctr, key=cv.contourArea)
-        cv.drawContours(mask, ctr, 0, (255,255,255), -1)
+
+    big_contour = max(contours, key=cv.contourArea)
+    cv.drawContours(mask, [big_contour], 0, (255,255,255), -1)
 
     # apply mask to input image
     masked_img = cv.bitwise_and(flatten, mask)
@@ -181,9 +184,9 @@ def draw_results(raw, qcards, all_ctrs):
 
         # Draw text twice, so letters have black outline
         
-        cv.putText(raw, (f"Size:{qcard.area}"),
+        cv.putText(raw, (f"Num:{qcard.get_number()}"),
                 (x-60, y-10), font, 1, (0, 0, 0), 3, cv.LINE_AA)
-        cv.putText(raw, (f"Size:{qcard.area}"),
+        cv.putText(raw, (f"Num:{qcard.get_number()}"),
                 (x-60, y-10), font, 1, (50, 200, 200), 2, cv.LINE_AA)
 
     # Draw card contours on image (have to do contours all at once or
