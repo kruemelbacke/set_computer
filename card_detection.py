@@ -64,7 +64,7 @@ def preprocess_card_img(card):
     # draw filled contour on black background
     mask = np.zeros_like(flatten)
 
-    contours = filter(lambda ctr: cv.contourArea(ctr) > 1000, contours)
+    contours = filter(lambda ctr: cv.contourArea(ctr) > 100, contours)
     cv.drawContours(mask, contours, -1, (255,255,255), -1)
     cv.drawContours(flatten, contours, -1, (255,0,0), 1)
 
