@@ -11,6 +11,8 @@ BIN_THRESHOLD = 128
 CARD_MAX_AREA = 120000
 CARD_MIN_AREA = 10000
 
+SYMBOL_MIN_AREA = 4000
+
 
 class CQueryCard(set_engine.CCard):
     """Structure to store information about query cards in the camera img_raw."""
@@ -60,15 +62,12 @@ def preprocess_card_img(card):
 
     contours = contours[0] if len(contours) == 2 else contours[1]
 
-    card.attributes["number"] = len(contours)
     # draw filled contour on black background
     mask = np.zeros_like(flatten)
 
-    # big_contour = max(contours, key=cv.contourArea)
-    for ctr in contours:
-        print(cv.contourArea(ctr))
+    countours = list(filter(lambda ctr: cv.contourArea(ctr) > SYMBOL_MIN_AREA, contours))
 
-    print("\n")
+    card.attributes["number"] = len(countours)
 
     cv.drawContours(mask, contours, -1, (255,255,255), -1)
     cv.drawContours(flatten, contours, -1, (255,0,0), 1)
