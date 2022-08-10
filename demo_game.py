@@ -29,7 +29,7 @@ class CGameField():
             for symbol in se.possible_attributes["symbol"]:
                 for shading in se.possible_attributes["shading"]:
                     for color in se.possible_attributes["color"]:
-                        card_deck.append(se.Card(
+                        card_deck.append(se.CCard(
                             number, symbol, shading, color))
         self.__card_deck = card_deck
 
@@ -134,6 +134,7 @@ def play_games_and_plot_histogram(number_of_games):
     """
     Play 'number_of_games' times and plot histogram of found SETs in each game
     """
+    print(f"Simulating {number_of_games} games")
     number_of_found_sets = []
     for i in tqdm(range(number_of_games)):  # pylint: disable=unused-variable
         number_of_found_sets.append(play_game(verbose_output=True))

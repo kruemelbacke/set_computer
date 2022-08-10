@@ -3,14 +3,14 @@ This module represents the game itself with card and rules
 """
 
 possible_attributes = {
-    "number": [None, 1, 2, 3],
-    "symbol": [None, "oval", "diamond", "wave"],
-    "shading": [None, "empty", "hatched", "solid"],
-    "color": [None, "red", "green", "purple"]
+    "number": [1, 2, 3],
+    "symbol": ["oval", "diamond", "wave"],
+    "shading": ["empty", "hatched", "solid"],
+    "color": ["red", "green", "purple"]
 }
 
 
-class Card():
+class CCard():
     """
     A class to represent a card.
 
@@ -26,10 +26,10 @@ class Card():
     """
     def __init__(self, number=None, symbol=None, shading=None, color=None):
         if not (
-            number in possible_attributes["number"]
-            and symbol in possible_attributes["symbol"]
-            and shading in possible_attributes["shading"]
-            and color in possible_attributes["color"]
+            (number in possible_attributes["number"] or number is None)
+            and (symbol in possible_attributes["symbol"] or symbol is None)
+            and (shading in possible_attributes["shading"] or shading is None)
+            and (color in possible_attributes["color"] or color is None)
         ):
             raise ValueError
 
@@ -44,7 +44,7 @@ class Card():
         """
         Replace default == method
         """
-        if not isinstance(other, Card):
+        if not isinstance(other, CCard):
             raise NotImplementedError
 
         return self.get_attributes() == other.get_attributes()
@@ -100,9 +100,9 @@ def is_a_set(card1, card2, card3):
     A function to check if the given cards are a SET.
     """
     if not (
-        isinstance(card1, Card)
-        and isinstance(card2, Card)
-        and isinstance(card3, Card)
+        isinstance(card1, CCard)
+        and isinstance(card2, CCard)
+        and isinstance(card3, CCard)
     ):
         # don't attempt to compare against unrelated types
         raise NotImplementedError
