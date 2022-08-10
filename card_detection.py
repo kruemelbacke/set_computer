@@ -61,8 +61,8 @@ def preprocess_card_img(card):
     # draw filled contour on black background
     mask = np.zeros_like(flatten)
     for ctr in contours:
-        big_contour = max(ctr, key=cv.contourArea)
-        cv.drawContours(mask, [big_contour], 0, (255,255,255), -1)
+        # big_contour = max(ctr, key=cv.contourArea)
+        cv.drawContours(mask, [ctr], 0, (255,255,255), -1)
 
     # apply mask to input image
     masked_img = cv.bitwise_and(flatten, mask)
