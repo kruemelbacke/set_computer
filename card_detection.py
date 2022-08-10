@@ -182,6 +182,15 @@ def draw_results(raw, qcards, all_ctrs):
     # Draw all detected contours (for debugging)
     cv.drawContours(raw,all_ctrs, -1, (255,0,0), 1)
 
+    
+    # Draw card contours on image (have to do contours all at once or
+    # they do not show up properly for some reason)
+    if len(qcards) > 0:
+        temp_cnts = []
+        for qcard in qcards:
+            temp_cnts.append(qcard.contour)
+        cv.drawContours(raw,temp_cnts, -1, (0,255,0), 3)
+
     for qcard in qcards:
         x = qcard.center[0]
         y = qcard.center[1]
@@ -193,14 +202,6 @@ def draw_results(raw, qcards, all_ctrs):
                 (x-60, y-10), font, 1, (0, 0, 0), 3, cv.LINE_AA)
         cv.putText(raw, (f"Num:{qcard.get_number()}"),
                 (x-60, y-10), font, 1, (50, 200, 200), 2, cv.LINE_AA)
-
-    # Draw card contours on image (have to do contours all at once or
-    # they do not show up properly for some reason)
-    if len(qcards) > 0:
-        temp_cnts = []
-        for qcard in qcards:
-            temp_cnts.append(qcard.contour)
-        cv.drawContours(raw,temp_cnts, -1, (0,255,0), 3)
 
     cv.putText(raw, (f"Detected Cards: {len(qcards)}"),
             (3, 24), font, 1, (255, 255, 0), 2, cv.LINE_AA)
