@@ -13,7 +13,7 @@ while True:
     cv.namedWindow("window", cv.WND_PROP_FULLSCREEN)
     cv.setWindowProperty("window",
                          cv.WND_PROP_FULLSCREEN, cv.WINDOW_FULLSCREEN)
-    cv.imshow("window", img)
+    cv.imshow("window", cv.resize(img,(800, 480)))
 
     key = cv.waitKey(1) & 0xFF
 
