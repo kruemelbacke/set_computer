@@ -180,7 +180,7 @@ def draw_results(raw, qcards, all_ctrs):
     font = cv.FONT_HERSHEY_SIMPLEX
     
     # Draw all detected contours (for debugging)
-    cv.drawContours(raw,all_ctrs, -1, (255,0,0), 1)
+    # cv.drawContours(raw,all_ctrs, -1, (255,0,0), 1)
 
     
     # Draw card contours on image (have to do contours all at once or
