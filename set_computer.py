@@ -3,7 +3,7 @@ import cv2 as cv
 from card_detection import CCardDetector
 
 ###########################################
-TARGET = False
+TARGET = True
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
@@ -17,7 +17,7 @@ if TARGET:
     WIN_BIG_W = 600
     WIN_BIG_H = 360
 else:
-    IMG_PATH = "Imgs/2022-08-05_11-16-12.png"
+    IMG_PATH = "Imgs/2022-08-10_18-33-28.png"
     WIN_FLATTEN_W = 200
     WIN_FLATTEN_H = 300
 
