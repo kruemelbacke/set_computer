@@ -65,7 +65,7 @@ def preprocess_card_img(card):
     mask = np.zeros_like(flatten)
 
     # big_contour = max(contours, key=cv.contourArea)
-    cv.drawContours(mask, contours, 0, (255,255,255), -1)
+    cv.drawContours(mask, contours, -1, (255,255,255), -1)
     cv.drawContours(flatten, contours, -1, (255,0,0), 1)
 
     # apply mask to input image
