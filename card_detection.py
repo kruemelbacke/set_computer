@@ -56,9 +56,9 @@ def preprocess_card_img(card):
     thresh_val, thresh = cv.threshold(grey, 0, 255, cv.THRESH_BINARY_INV + cv.THRESH_OTSU)
 
     # get largest contour
-    contours = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    contours, hier = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
     
-    contours = contours[0] if len(contours) == 2 else contours[1]
+    # contours = contours[0] if len(contours) == 2 else contours[1]
 
     card.attributes["number"] = len(contours)
     # draw filled contour on black background
