@@ -3,10 +3,10 @@ This module represents the game itself with card and rules
 """
 
 possible_attributes = {
-    "number": [1, 2, 3],
-    "symbol": ["oval", "diamond", "wave"],
-    "shading": ["empty", "hatched", "solid"],
-    "color": ["red", "green", "purple"]
+    "number": [None, 1, 2, 3],
+    "symbol": [None, "oval", "diamond", "wave"],
+    "shading": [None, "empty", "hatched", "solid"],
+    "color": [None, "red", "green", "purple"]
 }
 
 
@@ -24,7 +24,7 @@ class Card():
     get_...:
         returns attribute value
     """
-    def __init__(self, number, symbol, shading, color):
+    def __init__(self, number=None, symbol=None, shading=None, color=None):
         if not (
             number in possible_attributes["number"]
             and symbol in possible_attributes["symbol"]
@@ -33,7 +33,7 @@ class Card():
         ):
             raise ValueError
 
-        self.__attributes = {
+        self.attributes = {
             "number": number,
             "symbol": symbol,
             "shading": shading,
@@ -51,33 +51,33 @@ class Card():
 
     def get_attributes(self):
         """
-        Get all attributes as a dict and position
+        Get all attributes as a dict
         """
-        return self.__attributes
+        return self.attributes
 
     def get_number(self):
         """
         Get number of symbols of the card
         """
-        return self.__attributes["number"]
+        return self.attributes["number"]
 
     def get_symbol(self):
         """
         Get symbol of the card
         """
-        return self.__attributes["symbol"]
+        return self.attributes["symbol"]
 
     def get_shading(self):
         """
         Get shading of the symbol
         """
-        return self.__attributes["shading"]
+        return self.attributes["shading"]
 
     def get_color(self):
         """
         Get color of the symbol
         """
-        return self.__attributes["color"]
+        return self.attributes["color"]
 
 
 def check_val(val1, val2, val3):
@@ -122,7 +122,8 @@ def is_a_set(card1, card2, card3):
 
 def find_set_primitive_loop(cards):
     """
-    xx
+    Returns a list of 3 cards representing a SET
+    or an empty list if no SET was found
     """
     counter = 0
     if len(cards) >= 3:

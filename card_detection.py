@@ -2,6 +2,7 @@
 
 import numpy as np
 import cv2 as cv
+import set_engine
 
 
 # Constants
@@ -11,10 +12,13 @@ CARD_MAX_AREA = 120000
 CARD_MIN_AREA = 10000
 
 
-class CQueryCard:
+class CQueryCard(set_engine.Card):
     """Structure to store information about query cards in the camera img_raw."""
 
     def __init__(self):
+        # Init parent class from set_engine
+        super().__init__()
+
         self.contour = []  # Contour of card
         self.area = 0  # Area size of card
         self.width, self.height = 0, 0  # Width and height of card
