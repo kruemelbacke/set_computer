@@ -57,14 +57,19 @@ def preprocess_card_img(card):
 
     # get largest contour
     contours = cv.findContours(thresh, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
-    
+
     contours = contours[0] if len(contours) == 2 else contours[1]
 
     card.attributes["number"] = len(contours)
     # draw filled contour on black background
     mask = np.zeros_like(flatten)
 
-    contours = filter(lambda ctr: cv.contourArea(ctr) > 10, contours)
+    # big_contour = max(contours, key=cv.contourArea)
+    for ctr in contours:
+        print(cv.contourArea(ctr))
+
+    print("\n")
+
     cv.drawContours(mask, contours, -1, (255,255,255), -1)
     cv.drawContours(flatten, contours, -1, (255,0,0), 1)
 
