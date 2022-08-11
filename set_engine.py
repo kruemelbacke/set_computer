@@ -24,12 +24,12 @@ class CCard():
     get_...:
         returns attribute value
     """
-    def __init__(self, number=None, symbol=None, shading=None, color=None):
+    def __init__(self, number="", symbol="", shading="", color=""):
         if not (
-            (number in possible_attributes["number"] or number is None)
-            and (symbol in possible_attributes["symbol"] or symbol is None)
-            and (shading in possible_attributes["shading"] or shading is None)
-            and (color in possible_attributes["color"] or color is None)
+            (number in possible_attributes["number"] or number=="")
+            and (symbol in possible_attributes["symbol"] or symbol=="")
+            and (shading in possible_attributes["shading"] or shading=="")
+            and (color in possible_attributes["color"] or color=="")
         ):
             raise ValueError
 

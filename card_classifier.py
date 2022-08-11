@@ -67,10 +67,11 @@ class CCardClassifier:
 
     def calc_symbol(self, card):
         """Determines symbol by comparing reference symbols"""
-        # Extract first symbol
-        x,y,w,h = cv.boundingRect(card.symbol_contours[0])
-        symbol_qcard = card.symbol_mask[y:y+h, x:x+w]
-        card.attributes["symbol"] = self.compare_symbol_reference(symbol_qcard)
+        if len(card.symbol_contours) > 0:
+            # Extract first symbol
+            x,y,w,h = cv.boundingRect(card.symbol_contours[0])
+            symbol_qcard = card.symbol_mask[y:y+h, x:x+w]
+            card.attributes["symbol"] = self.compare_symbol_reference(symbol_qcard)
 
     def calc_shading(self, card):
         pass
