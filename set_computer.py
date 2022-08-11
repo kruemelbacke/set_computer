@@ -3,7 +3,7 @@ import cv2 as cv
 from card_detection import CCardDetector
 
 ###########################################
-TARGET = False
+TARGET = True
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
