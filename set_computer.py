@@ -3,7 +3,7 @@ import cv2 as cv
 from card_detection import CCardDetector
 
 ###########################################
-TARGET = True
+TARGET = False
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
@@ -48,8 +48,8 @@ if __name__ == '__main__':
             CardDetector.get_flatten_imgs(WIN_FLATTEN_W, WIN_FLATTEN_H)
 
         cv.imshow("FlattenCards", img_flatten)
-        cv.imshow("FlattenCards Thresh", img_flatten_thresh)
-        cv.imshow("FlattenCards Masked", img_symbol_mask)
+        # cv.imshow("FlattenCards Thresh", img_flatten_thresh)
+        # cv.imshow("FlattenCards Masked", img_symbol_mask)
 
         if TARGET:
             key = cv.waitKey(1) & 0xFF
