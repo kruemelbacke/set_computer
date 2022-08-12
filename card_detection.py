@@ -26,9 +26,12 @@ class CQueryCard(set_engine.CCard):
         self.center = [cent_x, cent_y]
 
         self.warp = self.flattener(raw, pts, self.width, self.height)
+        self.warp_grey = [] # 200x300, flattened grey img of card
         self.warp_thresh = [] # 200x300, flattened thresholded img of card
         self.symbol_contours = [] # list of contours of the card symbols
         self.symbol_mask = [] # symbols as white on black background
+        self.warp_white_balanced = []
+        self.warp_symbol_center_boxes = []
 
     def flattener(self, raw, pts, w, h):
         """Flattens an img_raw of a card into a top-down 200x300 perspective."""
@@ -99,7 +102,7 @@ class CQueryCard(set_engine.CCard):
 class CCardDetector:
     """Class to detect cards on game field"""
     def __init__(self):
-        self.font = cv.FONT_HERSHEY_SIMPLEX
+        
 
         self.CARD_MAX_AREA = 120000
         self.CARD_MIN_AREA = 10000
@@ -122,8 +125,13 @@ class CCardDetector:
         # Calc attributes of cards on game field
         self.CardClassifier.determine_attributes(self.qcards)
 
-        return self.qcards
+        return list(filter(self.card_is_correct, self.qcards))
 
+    def card_is_correct(self, card):
+        for attribute in card.attributes.values():
+            if attribute == "":
+                return False
+        return True
 
     def __preprocess_img_raw(self, raw):
         """Returns a grayed, img_blurred and thresholded img """
@@ -191,68 +199,3 @@ class CCardDetector:
                 qcards.append(CQueryCard(ctr, raw, np.float32(approx)))
 
         return qcards
-
-    def get_result_img(self):
-        """Draw the card name, center point, and contour on the camera img_raw."""
-
-        # Draw card contours on image (have to do contours all at once or
-        # they do not show up properly for some reason)
-        if len(self.qcards) > 0:
-            temp_cnts = []
-            for qcard in self.qcards:
-                temp_cnts.append(qcard.contour)
-            cv.drawContours(self.raw,temp_cnts, -1, (0,255,0), 3)
-
-        for qcard in self.qcards:
-            x = qcard.center[0]
-            y = qcard.center[1]
-            cv.circle(self.raw, (x, y), 5, (0, 255, 0), -1)
-
-            self.put_text_centered(self.raw, f"{qcard.get_number()}", x, y-40)
-            self.put_text_centered(self.raw, f"{qcard.get_symbol()}", x, y-10)
-            self.put_text_centered(self.raw, f"{qcard.get_color()}", x, y+20)
-
-        cv.putText(self.raw, (f"Detected Cards: {len(self.qcards)}"),
-                (3, 24), self.font, 1, (255, 255, 0), 2, cv.LINE_AA)
-
-        return self.raw
-
-    def get_flatten_imgs(self, win_flatten_w, win_flatten_h):
-        """Draw contour and mask"""
-        if len(self.qcards) > 0:
-            img_flatten = cv.resize(self.qcards[0].warp, (win_flatten_w, win_flatten_h))
-            img_flatten_thresh = cv.resize(self.qcards[0].warp_thresh, (win_flatten_w, win_flatten_h))
-            img_symbol_mask = cv.resize(self.qcards[0].symbol_mask, (win_flatten_w, win_flatten_h))
-
-            if len(self.qcards) > 1:
-                for card in self.qcards[1:]:
-                    # cv.drawContours(
-                    #     card.warp, card.symbol_contours, -1, (0, 0, 0), 1)
-                    img_flatten = np.hstack((
-                        img_flatten, cv.resize(
-                            card.warp, (win_flatten_w, win_flatten_h))))
-
-                    img_flatten_thresh = np.hstack((
-                        img_flatten_thresh, cv.resize(
-                            card.warp_thresh, (win_flatten_w, win_flatten_h))))
-
-                    img_symbol_mask = np.hstack((
-                        img_symbol_mask, cv.resize(
-                            card.symbol_mask, (win_flatten_w, win_flatten_h))))
-
-        return img_flatten, img_flatten_thresh, img_symbol_mask
-
-    def put_text_centered(self, img, text, center_x, center_y):
-        """Put text into the given img centered to given x and y coordinates"""
-        # get boundary of the text
-        textsize = cv.getTextSize(text, self.font, 1, 2)[0]
-
-        # get coords based on boundary
-        textX = int(center_x - textsize[0] / 2)
-        textY = int(center_y + textsize[1] / 2)
-
-        # Draw text twice, so letters have black outline
-        cv.putText(img, (text),
-            (textX, textY-10), self.font, 1, (0, 0, 0), 3, cv.LINE_AA)
-        cv.putText(img, (text),
-            (textX, textY-10), self.font, 1, (50, 200, 200), 2, cv.LINE_AA)

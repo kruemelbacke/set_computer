@@ -21,8 +21,8 @@ class CCardClassifier:
             self.correct_white_balance(card)
             self.calc_number(card)
             self.calc_symbol(card)
-            self.calc_shading(card)
             self.calc_color(card)
+            self.calc_shading(card)
 
     def correct_white_balance(self, card):
         """Calc the mean of the outer area of the card,
@@ -36,13 +36,14 @@ class CCardClassifier:
         img_g = img_g / white_g
         img_r = img_r / white_r
 
-        card.warp = cv.merge([img_b, img_g, img_r])
+        card.warp_white_balanced = cv.merge([img_b, img_g, img_r])
 
     def preprocess_card_img(self, card):
         """Preprocess flatten card image"""
         flatten = card.warp
         grey = cv.cvtColor(flatten, cv.COLOR_BGR2GRAY)
-        thresh_val, thresh = cv.threshold(grey, 0, 255,
+        blur = cv.GaussianBlur(grey, (3, 3), 0)
+        thresh_val, thresh = cv.threshold(blur, 0, 255,
                                         cv.THRESH_BINARY_INV + cv.THRESH_OTSU)
 
         # get largest contour
@@ -57,13 +58,15 @@ class CCardClassifier:
         cv.drawContours(mask, contours, -1, (255, 255, 255), -1)
 
         card.symbol_contours = contours
+        card.warp_grey = blur
         card.warp_thresh = thresh
         card.symbol_mask = mask
 
 
     def calc_number(self, card):
         """ Calculates number of symbols by analyzing num of symbol contours"""
-        card.attributes["number"] = len(card.symbol_contours)
+        if len(card.symbol_contours) > 0 and len(card.symbol_contours) <= 3:
+            card.attributes["number"] = len(card.symbol_contours)
 
     def calc_symbol(self, card):
         """Determines symbol by comparing reference symbols"""
@@ -74,15 +77,49 @@ class CCardClassifier:
             card.attributes["symbol"] = self.compare_symbol_reference(symbol_qcard)
 
     def calc_shading(self, card):
-        pass
+        if len(card.symbol_contours) > 0:
+            img = card.warp_white_balanced
+            # Extract first symbol
+            x,y,w,h = cv.boundingRect(card.symbol_contours[0])
+            
+            card.warp_symbol_center_boxes = card.warp_white_balanced.copy()
+            
+            # Pick only small part of symbol center
+            center_box = img[
+                int(y+0.4*h):int(y+0.6*h),
+                int(x+0.4*w):int(x+0.6*w)
+            ]
 
-        # # apply mask to input image
-        # masked_img = cv.bitwise_and(flatten, mask)
+            # Draw small part of smbol into img
+            cv.rectangle(card.warp_symbol_center_boxes,
+                (int(x+0.4*w),int(y+0.4*h)),(int(x+0.6*w),int(y+0.6*h)),(0,0,0), 2)
+            cv.rectangle(card.warp_symbol_center_boxes,
+                (int(x+0.4*w),int(y+0.4*h)),(int(x+0.6*w),int(y+0.6*h)),(0,255,255), 1)
+
+        if self.symbol_is_solid(center_box) is True:
+            card.attributes["shading"] = "solid"
+        else:
+            card.attributes["shading"] = "empty"
+
+        self.symbol_is_empty(center_box)
+
+    def symbol_is_solid(self, center_box):
+        center_box_hsv = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HSV)
+        saturation = center_box_hsv[:, :, 1].mean()
+        if saturation > 0.9:
+            return True
+
+        return False
+
+    def symbol_is_empty(self, center_box):
+        center_box_hls = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HLS)
+        light = center_box_hls[:, :, 1].mean()
+        print(light)
 
 
     def calc_color(self, card):
         inner_mask, _, _ = cv.split(card.symbol_mask)
-        mean_b, mean_g, mean_r, _ = cv.mean(card.warp, mask=inner_mask)
+        mean_b, mean_g, mean_r, _ = cv.mean(card.warp_white_balanced, mask=inner_mask)
         color_means = {
             "red" : mean_r,
             "green" : mean_g,
@@ -92,16 +129,22 @@ class CCardClassifier:
 
     def compare_symbol_reference(self, symbol_qcard):
         """Compare symbol on card with reference symbol
-            return name of symbol or None"""
+            return name of symbol or ''"""
         similarity = {}
         for symbol_name in self.symbol_reference:
+            symbol_size_h, symbol_size_w, _ = symbol_qcard.shape
+            if (
+                symbol_size_h < 50 or symbol_size_h > 80 
+                or symbol_size_w < 120 or symbol_size_w > 160
+            ):
+                return ""
+
             symbol_ref = self.symbol_reference[symbol_name]
             ref_h, ref_w, _ = symbol_ref.shape
             symbol_qcard_resized = cv.resize(symbol_qcard, (ref_w, ref_h))
 
             errorL2 = cv.norm(symbol_qcard_resized, symbol_ref, cv.NORM_L2)
             similarity[symbol_name] = 1 - errorL2 / ( ref_h * ref_w )
-
         return max(similarity, key=similarity.get)
 
         
