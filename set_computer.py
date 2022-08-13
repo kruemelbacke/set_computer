@@ -164,7 +164,7 @@ if __name__ == '__main__':
 
         if set_counter > 2:
             while mouse_clicked is False:
-                pass
+                cv.waitKey(-1)
             mouse_clicked = False
             set_counter = 0
 
