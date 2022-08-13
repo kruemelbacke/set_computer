@@ -114,7 +114,7 @@ class CCardClassifier:
     def symbol_is_empty(self, center_box):
         center_box_hls = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HLS)
         light = center_box_hls[:, :, 1].mean()
-        print(light)
+        # print(light)
 
 
     def calc_color(self, card):
