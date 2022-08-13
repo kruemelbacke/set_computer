@@ -141,8 +141,9 @@ if __name__ == '__main__':
             if set_counter > 2:
                 # SET found!
                 draw_card_contours(img_raw, set_cards, (0, 255, 0))
-                put_text(img_raw, "SET! (press Space to continue)",\
-                    150, WIN_BIG_W-80, 2)
+                if GAMEMODE:
+                    put_text(img_raw, "SET! (press Space to continue)",\
+                        150, WIN_BIG_W-80, 2)
                 show_img_from_cards(set_cards, "warp_symbol_center_boxes", "Found SET")
         else:
             set_counter = 0
