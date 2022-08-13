@@ -1,5 +1,6 @@
 import cv2 as cv
 import numpy as np
+import set_engine
 
 from card_detection import CCardDetector
 
@@ -27,10 +28,7 @@ else:
 
 FONT = cv.FONT_HERSHEY_SIMPLEX
 
-
-def show_results(raw: list, qcards: list):
-    """Draw the card name, center point, and contour on the camera img_raw."""
-
+def draw_card_contours(raw: list, qcards: list, color: tuple):
     # Draw card contours on image (have to do contours all at once or
     # they do not show up properly for some reason)
     if len(qcards) > 0:
@@ -38,7 +36,10 @@ def show_results(raw: list, qcards: list):
         for qcard in qcards:
             temp_cnts.append(qcard.contour)
         cv.drawContours(raw,temp_cnts, -1, (0,0,0), 3)
-        cv.drawContours(raw,temp_cnts, -1, (0,255,0), 2)
+        cv.drawContours(raw,temp_cnts, -1, color, 2)
+
+def show_results(raw: list, qcards: list):
+    """Draw the card name, center point, and contour on the camera img_raw."""
 
     for qcard in qcards:
         x = qcard.center[0]
@@ -106,7 +107,11 @@ if __name__ == '__main__':
             img_raw = cv.imread(IMG_PATH)
 
         Cards = CardDetector.get_cards_from_img(img_raw)
+        draw_card_contours(img_raw, Cards, (0, 0, 255))
 
+        set_cards = set_engine.find_set_primitive_loop(Cards)
+        draw_card_contours(img_raw, set_cards, (0, 255, 0))
+        
         # Show Card Detection
         show_results(img_raw, Cards)
 
