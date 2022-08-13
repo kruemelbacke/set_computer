@@ -106,9 +106,6 @@ def put_text_centered(img, text, center_x, center_y, size=1):
 
 def put_text(img, text, textX, textY, size=1):
     """Put text into the given img centered to given x and y coordinates"""
-    # get boundary of the text
-    textsize = cv.getTextSize(text, FONT, 1, 2)[0]
-
     # Draw text twice, so letters have black outline
     cv.putText(img, (text),
         (textX, textY-10), FONT, size, (0, 0, 0), 3, cv.LINE_AA)
@@ -138,12 +135,9 @@ if __name__ == '__main__':
 
         if len(set_cards) == 3:
             set_counter += 1
-            if set_counter > 2:
+            if set_counter > 1:
                 # SET found!
                 draw_card_contours(img_raw, set_cards, (0, 255, 0))
-                if GAMEMODE:
-                    put_text(img_raw, "SET! (press Space to continue)",\
-                        150, WIN_BIG_W-80, 2)
                 show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
         else:
             set_counter = 0
@@ -170,22 +164,11 @@ if __name__ == '__main__':
         if TARGET:
             key = cv.waitKey(1) & 0xFF
 
-            if set_counter > 2 and GAMEMODE:
-                while key != ord(" "):
-                    key = cv.waitKey(1) & 0xFF
-                    set_counter = 0
-
-                    # if `q` key was pressed, break from the loop
-                    if key == ord("q"):
-                        break
-                cv.destroyWindow("Found SET")
-
             # if `q` key was pressed, break from the loop
             if key == ord("q"):
                 CamStream.stop()
                 break
 
-                
         else:
             cv.waitKey(0)
             break
