@@ -112,6 +112,9 @@ class CCardClassifier:
         else:
             card.attributes["shading"] = "hatched"
 
+        cv.putText(card.warp_symbol_center_boxes, card.get_shading(), (5, 60), \
+            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+
 
     def calc_color(self, card):
         inner_mask, _, _ = cv.split(card.symbol_mask)
