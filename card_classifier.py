@@ -103,7 +103,7 @@ class CCardClassifier:
 
         center_box_hls = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HLS)
         lightness_hls = center_box_hls[:, :, 1].mean()
-        cv.putText(card.warp_symbol_center_boxes, f"Lig: {lightness_hls:0.2f}", (5, 20), \
+        cv.putText(card.warp_symbol_center_boxes, f"Lig: {lightness_hls:0.2f}", (5, 40), \
             cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
         if saturation_hsv > 0.5:
             card.attributes["shading"] = "solid"
