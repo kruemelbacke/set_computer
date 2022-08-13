@@ -107,7 +107,7 @@ class CCardClassifier:
             cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
         if saturation_hsv > 0.5:
             card.attributes["shading"] = "solid"
-        elif lightness_hls > 0.9:
+        elif lightness_hls > 0.98:
             card.attributes["shading"] = "empty"
         else:
             card.attributes["shading"] = "hatched"
