@@ -6,6 +6,7 @@ from card_detection import CCardDetector
 
 ###########################################
 TARGET = True
+FULLSCREEN = True
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
@@ -113,13 +114,17 @@ if __name__ == '__main__':
 
         set_cards = set_engine.find_set_primitive_loop(Cards)
         draw_card_contours(img_raw, set_cards, (0, 255, 0))
-        
+
         # Show Card Detection
         draw_attributes(img_raw, Cards)
 
         draw_num_of_cards(img_raw, Cards)
-
-        cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
+        if FULLSCREEN:
+            cv.namedWindow("CardDetection", cv.WND_PROP_FULLSCREEN)
+            cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
+            cv.imshow("CardDetection", img_raw)
+        else:
+            cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
 
         show_img_from_cards(Cards, "warp_symbol_center_boxes")
 
