@@ -6,8 +6,7 @@ from card_detection import CCardDetector
 
 ###########################################
 TARGET = True
-FULLSCREEN = True
-GAMEMODE = False
+GAMEMODE = True
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
@@ -28,7 +27,7 @@ else:
     WIN_BIG_W = 1280
     WIN_BIG_H = 720
 
-if FULLSCREEN:
+if GAMEMODE:
     WIN_FLATTEN_W = 100
     WIN_FLATTEN_H = 150
 
@@ -146,9 +145,9 @@ if __name__ == '__main__':
 
         draw_num_of_cards(img_raw, Cards)
 
-        if FULLSCREEN:
-            cv.namedWindow("CardDetection", cv.WND_PROP_FULLSCREEN)
-            cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
+        if GAMEMODE:
+            cv.namedWindow("CardDetection", cv.WND_PROP_GAMEMODE)
+            cv.setWindowProperty("CardDetection",cv.WND_PROP_GAMEMODE,cv.WINDOW_GAMEMODE)
             cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
         else:
             cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
