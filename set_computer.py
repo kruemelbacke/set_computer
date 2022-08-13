@@ -7,7 +7,7 @@ from card_detection import CCardDetector
 ###########################################
 TARGET = True
 FULLSCREEN = True
-GAMEMODE = False
+GAMEMODE = True
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
@@ -158,12 +158,13 @@ if __name__ == '__main__':
         else:
             cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
 
-        show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading detection")
-        # show_img_from_cards([Cards[0]], "warp", "Flatten")
-        # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey")
-        # show_img_from_cards([Cards[0]], "warp_thresh", "Flatten threshold")
-        # show_img_from_cards([Cards[0]], "symbol_mask", "Symbol mask")
-        # show_img_from_cards([Cards[0]], "warp_white_balanced", "White balanced")
+        if GAMEMODE is False:
+            show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading detection")
+            # show_img_from_cards([Cards[0]], "warp", "Flatten")
+            # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey")
+            # show_img_from_cards([Cards[0]], "warp_thresh", "Flatten threshold")
+            # show_img_from_cards([Cards[0]], "symbol_mask", "Symbol mask")
+            # show_img_from_cards([Cards[0]], "warp_white_balanced", "White balanced")
 
         if TARGET:
             key = cv.waitKey(1) & 0xFF
