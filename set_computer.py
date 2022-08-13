@@ -38,7 +38,11 @@ def draw_card_contours(raw: list, qcards: list, color: tuple):
         cv.drawContours(raw,temp_cnts, -1, (0,0,0), 3)
         cv.drawContours(raw,temp_cnts, -1, color, 2)
 
-def show_results(raw: list, qcards: list):
+def draw_num_of_cards(raw, qcards):
+    cv.putText(raw, (f"Detected Cards: {len(qcards)}"),
+            (3, 24), FONT, 1, (255, 255, 0), 2, cv.LINE_AA)
+
+def draw_attributes(raw: list, qcards: list):
     """Draw the card name, center point, and contour on the camera img_raw."""
 
     for qcard in qcards:
@@ -53,8 +57,6 @@ def show_results(raw: list, qcards: list):
 
     cv.putText(raw, (f"Detected Cards: {len(qcards)}"),
             (3, 24), FONT, 1, (255, 255, 0), 2, cv.LINE_AA)
-
-    cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
 
 
 def show_flatten_cards(qcards: list):
@@ -113,7 +115,11 @@ if __name__ == '__main__':
         draw_card_contours(img_raw, set_cards, (0, 255, 0))
         
         # Show Card Detection
-        show_results(img_raw, Cards)
+        draw_attributes(img_raw, Cards)
+
+        draw_num_of_cards(img_raw, Cards)
+
+        cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
 
         show_img_from_cards(Cards, "warp_symbol_center_boxes")
 
