@@ -7,6 +7,7 @@ from card_detection import CCardDetector
 ###########################################
 TARGET = True
 FULLSCREEN = False
+GAMEMODE = True
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
@@ -167,7 +168,7 @@ if __name__ == '__main__':
         if TARGET:
             key = cv.waitKey(1) & 0xFF
 
-            if set_counter > 2:
+            if set_counter > 2 and GAMEMODE:
                 while key != ord(" "):
                     key = cv.waitKey(1) & 0xFF
                     set_counter = 0
