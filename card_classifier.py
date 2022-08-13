@@ -98,16 +98,16 @@ class CCardClassifier:
 
         center_box_hsv = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HSV)
         saturation_hsv = center_box_hsv[:, :, 1].mean()
-        cv.putText(card.warp_symbol_center_boxes, f"Sat: {saturation:0.2f}", (5, 20), \
+        cv.putText(card.warp_symbol_center_boxes, f"Sat: {saturation_hsv:0.2f}", (5, 20), \
             cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
 
         center_box_hls = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HLS)
-        lightness = center_box_hls[:, :, 1].mean()
-        cv.putText(card.warp_symbol_center_boxes, f"Lig: {lightness:0.2f}", (5, 20), \
+        lightness_hls = center_box_hls[:, :, 1].mean()
+        cv.putText(card.warp_symbol_center_boxes, f"Lig: {lightness_hls:0.2f}", (5, 20), \
             cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
         if saturation_hsv > 0.5:
             card.attributes["shading"] = "solid"
-        elif saturation < 0.1:
+        elif lightness_hls < 0.1:
             card.attributes["shading"] = "empty"
         else:
             card.attributes["shading"] = "hatched"
