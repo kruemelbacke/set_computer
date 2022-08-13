@@ -51,13 +51,15 @@ def draw_num_of_cards(raw, qcards):
     cv.putText(raw, (f"Detected Cards: {len(qcards)}"),
             (3, 24), FONT, 1, (255, 255, 0), 2, cv.LINE_AA)
 
+
 def draw_attributes(raw: list, qcards: list):
     """Draw the card name, center point, and contour on the camera img_raw."""
 
     for qcard in qcards:
         x = qcard.center[0]
         y = qcard.center[1]
-        cv.circle(raw, (x, y), 5, (0, 255, 0), -1)
+
+    #     cv.circle(raw, (x, y), 5, (0, 255, 0), -1)
 
         put_text_centered(raw, f"{qcard.get_number()}", x, y-40)
         put_text_centered(raw, f"{qcard.get_symbol()}", x, y-10)
@@ -66,10 +68,6 @@ def draw_attributes(raw: list, qcards: list):
 
     cv.putText(raw, (f"Detected Cards: {len(qcards)}"),
             (3, 24), FONT, 1, (255, 255, 0), 2, cv.LINE_AA)
-
-
-def show_flatten_cards(qcards: list):
-    """Draw contour and mask"""
 
 
 def show_img_from_cards(qcards: list, img_name: str, win_name: str):
@@ -88,6 +86,7 @@ def get_img_from_cards(qcards: list, img_name: str):
         img_list.append(cv.resize(getattr(card, img_name), (WIN_FLATTEN_W, WIN_FLATTEN_H)))
     return tuple(img_list)
 
+
 def put_text_centered(img, text, center_x, center_y, size=1):
     """Put text into the given img centered to given x and y coordinates"""
     # get boundary of the text
@@ -102,6 +101,7 @@ def put_text_centered(img, text, center_x, center_y, size=1):
         (textX, textY-10), FONT, size, (0, 0, 0), 3, cv.LINE_AA)
     cv.putText(img, (text),
         (textX, textY-10), FONT, size, (50, 200, 200), 2, cv.LINE_AA)
+
 
 def put_text(img, text, textX, textY, size=1):
     """Put text into the given img centered to given x and y coordinates"""
