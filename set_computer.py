@@ -72,14 +72,14 @@ def show_flatten_cards(qcards: list):
     """Draw contour and mask"""
 
 
-def show_img_from_cards(qcards: list, img_name: str):
+def show_img_from_cards(qcards: list, img_name: str, win_name: str):
     imgs = get_img_from_cards(qcards, img_name)
 
     if len(qcards) == 1:
-        cv.imshow(img_name, imgs[0])
+        cv.imshow(win_name, imgs[0])
 
     if len(qcards) > 1:
-        cv.imshow(img_name, np.hstack(imgs))
+        cv.imshow(win_name, np.hstack(imgs))
 
 
 def get_img_from_cards(qcards: list, img_name: str):
@@ -140,8 +140,8 @@ if __name__ == '__main__':
                 # SET found!
                 draw_card_contours(img_raw, set_cards, (0, 255, 0))
                 put_text(img_raw, "SET! (press Space to continue)",\
-                    100, WIN_BIG_W-80, 2)
-                show_img_from_cards(set_cards, "warp_white_balanced")
+                    150, WIN_BIG_W-80, 2)
+                show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
         else:
             set_counter = 0
 
@@ -157,13 +157,13 @@ if __name__ == '__main__':
         else:
             cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
 
-        # show_img_from_cards(Cards, "warp_symbol_center_boxes")
+        # show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading detection")
 
-        # show_img_from_cards([Cards[0]], "warp")
-        # show_img_from_cards([Cards[0]], "warp_grey")
-        # show_img_from_cards([Cards[0]], "warp_thresh")
-        # show_img_from_cards([Cards[0]], "symbol_mask")
-        # show_img_from_cards([Cards[0]], "warp_white_balanced")
+        # show_img_from_cards([Cards[0]], "warp", "Flatten")
+        # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey")
+        # show_img_from_cards([Cards[0]], "warp_thresh", "Flatten threshold")
+        # show_img_from_cards([Cards[0]], "symbol_mask", "Symbol mask")
+        # show_img_from_cards([Cards[0]], "warp_white_balanced", "White balanced")
 
         if TARGET:
             key = cv.waitKey(1) & 0xFF
@@ -176,6 +176,7 @@ if __name__ == '__main__':
                     # if `q` key was pressed, break from the loop
                     if key == ord("q"):
                         break
+                cv.destroyWindow("Found SET")
 
             # if `q` key was pressed, break from the loop
             if key == ord("q"):
