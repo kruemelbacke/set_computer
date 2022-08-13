@@ -146,7 +146,7 @@ if __name__ == '__main__':
             set_counter = 0
 
         # Show Card Detection
-        # draw_attributes(img_raw, Cards)
+        draw_attributes(img_raw, Cards)
 
         draw_num_of_cards(img_raw, Cards)
 
