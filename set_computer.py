@@ -14,8 +14,8 @@ FULLSCREEN = False
 
 if TARGET:
     from camera_stream import CCameraStream
-    WIN_FLATTEN_W = 50
-    WIN_FLATTEN_H = 75
+    WIN_FLATTEN_W = 80
+    WIN_FLATTEN_H = 120
 
     WIN_BIG_W = 600
     WIN_BIG_H = 360
