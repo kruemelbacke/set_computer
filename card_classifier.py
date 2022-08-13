@@ -14,15 +14,16 @@ class CCardClassifier:
             self.symbol_reference[symbol_name] = \
                 cv.imread(f"{SYMBOL_REF_PATH}/{symbol_name}.png")
 
-    def determine_attributes(self, cards: list):
-        """ Determines attributes of given qcards """
-        for card in cards:
-            self.preprocess_card_img(card)
-            self.correct_white_balance(card)
-            self.calc_number(card)
-            self.calc_symbol(card)
-            self.calc_color(card)
-            self.calc_shading(card)
+    def determine_attributes(self, card):
+        """ Determines attributes of given qcard """
+        self.preprocess_card_img(card)
+        self.correct_white_balance(card)
+        self.calc_number(card)
+        self.calc_symbol(card)
+        self.calc_color(card)
+        self.calc_shading(card)
+
+        return card
 
     def correct_white_balance(self, card):
         """Calc the mean of the outer area of the card,

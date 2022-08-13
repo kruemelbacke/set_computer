@@ -1,5 +1,5 @@
 """Module to detect cards in image"""
-
+from multiprocessing import Pool
 import numpy as np
 import cv2 as cv
 import set_engine
@@ -109,7 +109,6 @@ class CCardDetector:
 
         self.raw = [] # raw image of game field
         self.thresh = [] # thresholded img of game field
-        self.qcards = [] # list of detected cards on game field
 
         self.CardClassifier = CCardClassifier()
 
@@ -120,12 +119,13 @@ class CCardDetector:
         _, _, self.thresh = self.__preprocess_img_raw(raw)
 
         # Find the contours of all cards in the img_raw (query cards)
-        self.qcards = self.__find_cards(self.thresh, raw)
+        qcards = self.__find_cards(self.thresh, raw)
 
-        # Calc attributes of cards on game field
-        self.CardClassifier.determine_attributes(self.qcards)
+        with Pool(12) as p:
+            # Calc attributes of cards on game field
+            qcards = p.map(self.CardClassifier.determine_attributes, qcards)
 
-        return list(filter(self.card_is_correct, self.qcards))
+        return list(filter(self.card_is_correct, qcards))
 
     def card_is_correct(self, card):
         for attribute in card.attributes.values():
