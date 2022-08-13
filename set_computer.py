@@ -147,6 +147,7 @@ if __name__ == '__main__':
                 show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
         else:
             set_counter = 0
+            cv.destroyWindow("Found SET")
 
 
         draw_num_of_cards(img_raw, Cards)
