@@ -140,7 +140,7 @@ if __name__ == '__main__':
                 # SET found!
                 draw_card_contours(img_raw, set_cards, (0, 255, 0))
                 put_text(img_raw, "SET! (press Space to continue)",\
-                    100, WIN_BIG_W-30, 2)
+                    100, WIN_BIG_W-80, 2)
                 show_img_from_cards(set_cards, "warp_white_balanced")
         else:
             set_counter = 0
