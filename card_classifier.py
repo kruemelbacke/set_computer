@@ -82,9 +82,9 @@ class CCardClassifier:
             img = card.warp_white_balanced
             # Extract first symbol
             x,y,w,h = cv.boundingRect(card.symbol_contours[0])
-            
+
             card.warp_symbol_center_boxes = card.warp_white_balanced.copy()
-            
+
             # Pick only small part of symbol center
             center_box = img[
                 int(y+0.4*h):int(y+0.6*h),
@@ -97,27 +97,17 @@ class CCardClassifier:
             cv.rectangle(card.warp_symbol_center_boxes,
                 (int(x+0.4*w),int(y+0.4*h)),(int(x+0.6*w),int(y+0.6*h)),(0,255,255), 1)
 
-        if self.symbol_is_solid(card, center_box) is True:
-            card.attributes["shading"] = "solid"
-        else:
-            card.attributes["shading"] = "empty"
-
-        self.symbol_is_empty(center_box)
-
-    def symbol_is_solid(self, card, center_box):
         center_box_hsv = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HSV)
         saturation = center_box_hsv[:, :, 1].mean()
         cv.putText(card.warp_symbol_center_boxes, f"Sat: {saturation:0.2f}", (5, 20), \
             cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+
         if saturation > 0.5:
-            return True
-
-        return False
-
-    def symbol_is_empty(self, center_box):
-        center_box_hls = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HLS)
-        light = center_box_hls[:, :, 1].mean()
-        # print(light)
+            card.attributes["shading"] = "solid"
+        elif saturation < 0.1:
+            card.attributes["shading"] = "empty"
+        else:
+            card.attributes["shading"] = "hatched"
 
 
     def calc_color(self, card):
