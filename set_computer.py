@@ -33,6 +33,11 @@ if FULLSCREEN:
 
 FONT = cv.FONT_HERSHEY_SIMPLEX
 
+mouse_clicked = False
+
+def mouse_callback(event, x, y, flags, param):
+    mouse_clicked = True
+
 def draw_card_contours(raw: list, qcards: list, color: tuple):
     # Draw card contours on image (have to do contours all at once or
     # they do not show up properly for some reason)
@@ -136,9 +141,12 @@ if __name__ == '__main__':
             cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
         else:
             cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
+        cv.setMouseCallback("CardDetection", mouse_callback)
 
         if set_counter > 2:
-            cv.waitKey(0)
+            while mouse_clicked is False:
+                pass
+            mouse_clicked = False
             set_counter = 0
 
         # show_img_from_cards(Cards, "warp_symbol_center_boxes")
