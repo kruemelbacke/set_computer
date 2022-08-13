@@ -28,8 +28,12 @@ else:
     WIN_BIG_H = 720
 
 if FULLSCREEN:
+    WIN_FLATTEN_W = 100
+    WIN_FLATTEN_H = 150
+
     WIN_BIG_W = 800
     WIN_BIG_H = 480
+
 
 FONT = cv.FONT_HERSHEY_SIMPLEX
 
@@ -99,6 +103,17 @@ def put_text_centered(img, text, center_x, center_y, size=1):
     cv.putText(img, (text),
         (textX, textY-10), FONT, size, (50, 200, 200), 2, cv.LINE_AA)
 
+def put_text(img, text, textX, textY, size=1):
+    """Put text into the given img centered to given x and y coordinates"""
+    # get boundary of the text
+    textsize = cv.getTextSize(text, FONT, 1, 2)[0]
+
+    # Draw text twice, so letters have black outline
+    cv.putText(img, (text),
+        (textX, textY-10), FONT, size, (0, 0, 0), 3, cv.LINE_AA)
+    cv.putText(img, (text),
+        (textX, textY-10), FONT, size, (0, 255, 0), 2, cv.LINE_AA)
+
 
 if __name__ == '__main__':
     if TARGET:
@@ -124,9 +139,11 @@ if __name__ == '__main__':
             if set_counter > 2:
                 # SET found!
                 draw_card_contours(img_raw, set_cards, (0, 255, 0))
-                put_text_centered(img_raw, "SET! (press Space to continue)",\
-                    400, WIN_BIG_W/2, 2)
+                put_text(img_raw, "SET! (press Space to continue)",\
+                    WIN_BIG_W-30, 100, 2)
                 show_img_from_cards(set_cards, "warp_white_balanced")
+        else:
+            set_counter = 0
 
         # Show Card Detection
         draw_attributes(img_raw, Cards)
