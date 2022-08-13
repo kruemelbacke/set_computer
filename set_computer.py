@@ -6,8 +6,8 @@ from card_detection import CCardDetector
 
 ###########################################
 TARGET = True
-FULLSCREEN = False
-GAMEMODE = False
+FULLSCREEN = True
+GAMEMODE = True
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
