@@ -27,6 +27,10 @@ else:
     WIN_BIG_W = 1280
     WIN_BIG_H = 720
 
+if FULLSCREEN:
+    WIN_BIG_W = 800
+    WIN_BIG_H = 480
+
 FONT = cv.FONT_HERSHEY_SIMPLEX
 
 def draw_card_contours(raw: list, qcards: list, color: tuple):
@@ -103,6 +107,7 @@ if __name__ == '__main__':
 
     CardDetector = CCardDetector()
 
+    set_counter = 0
     while True:
         if TARGET:
             img_raw = CamStream.get()
@@ -113,20 +118,30 @@ if __name__ == '__main__':
         draw_card_contours(img_raw, Cards, (0, 0, 255))
 
         set_cards = set_engine.find_set_primitive_loop(Cards)
-        draw_card_contours(img_raw, set_cards, (0, 255, 0))
+
+        if len(set_cards) == 3:
+            set_counter += 1
+            if set_counter > 2:
+                # SET found!
+                draw_card_contours(img_raw, set_cards, (0, 255, 0))
 
         # Show Card Detection
         draw_attributes(img_raw, Cards)
 
         draw_num_of_cards(img_raw, Cards)
+
         if FULLSCREEN:
             cv.namedWindow("CardDetection", cv.WND_PROP_FULLSCREEN)
             cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
-            cv.imshow("CardDetection", img_raw)
+            cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
         else:
             cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
 
-        show_img_from_cards(Cards, "warp_symbol_center_boxes")
+        if set_counter > 2:
+            cv.waitKey(0)
+            set_counter = 0
+
+        # show_img_from_cards(Cards, "warp_symbol_center_boxes")
 
         # show_img_from_cards([Cards[0]], "warp")
         # show_img_from_cards([Cards[0]], "warp_grey")
