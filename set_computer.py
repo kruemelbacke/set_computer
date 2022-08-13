@@ -146,13 +146,11 @@ if __name__ == '__main__':
         draw_num_of_cards(img_raw, Cards)
 
         if GAMEMODE:
-            cv.namedWindow("CardDetection", cv.WND_PROP_GAMEMODE)
-            cv.setWindowProperty("CardDetection",cv.WND_PROP_GAMEMODE,cv.WINDOW_GAMEMODE)
+            cv.namedWindow("CardDetection", cv.WND_PROP_FULLSCREEN)
+            cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
             cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
         else:
             cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
-
-        if GAMEMODE is False:
             show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading detection")
             # show_img_from_cards([Cards[0]], "warp", "Flatten")
             # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey")
