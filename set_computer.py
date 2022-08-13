@@ -154,6 +154,10 @@ if __name__ == '__main__':
                     key = cv.waitKey(1) & 0xFF
                     set_counter = 0
 
+                    # if `q` key was pressed, break from the loop
+                    if key == ord("q"):
+                        break
+
             # if `q` key was pressed, break from the loop
             if key == ord("q"):
                 CamStream.stop()
