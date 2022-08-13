@@ -108,7 +108,7 @@ class CCardClassifier:
         saturation = center_box_hsv[:, :, 1].mean()
         cv.putText(card.warp_symbol_center_boxes, f"Sat: {saturation:0.2f}", (5, 20), \
             cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
-        if saturation > 0.9:
+        if saturation > 0.5:
             return True
 
         return False
