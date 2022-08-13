@@ -124,6 +124,7 @@ if __name__ == '__main__':
             if set_counter > 2:
                 # SET found!
                 draw_card_contours(img_raw, set_cards, (0, 255, 0))
+                put_text_centered(img_raw, "SET! (press Space to continue", 5, 40)
 
         # Show Card Detection
         draw_attributes(img_raw, Cards)
@@ -148,13 +149,16 @@ if __name__ == '__main__':
         if TARGET:
             key = cv.waitKey(1) & 0xFF
 
+            if set_counter > 2:
+                while key != ord(" "):
+                    key = cv.waitKey(1) & 0xFF
+                    set_counter = 0
+
             # if `q` key was pressed, break from the loop
             if key == ord("q"):
                 CamStream.stop()
                 break
-            if set_counter > 2:
-                while key != ord(" "):
-                    key = cv.waitKey(1) & 0xFF
+
                 
         else:
             cv.waitKey(0)
