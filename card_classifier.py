@@ -96,8 +96,8 @@ class CCardClassifier:
         cv.rectangle(card.warp_symbol_center_boxes,
             (int(x+0.4*w),int(y+0.4*h)),(int(x+0.6*w),int(y+0.6*h)),(0,255,255), 1)
 
-        center_box_hsv = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HSV)
-        saturation = center_box_hsv[:, :, 1].mean()
+        center_box_hsv = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HLS)
+        saturation = center_box_hsv[:, :, 2].mean()
         cv.putText(card.warp_symbol_center_boxes, f"Sat: {saturation:0.2f}", (5, 20), \
             cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
 
