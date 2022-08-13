@@ -125,7 +125,7 @@ if __name__ == '__main__':
                 # SET found!
                 draw_card_contours(img_raw, set_cards, (0, 255, 0))
                 put_text_centered(img_raw, "SET! (press Space to continue",\
-                    WIN_BIG_H-5, WIN_BIG_W/2, 3)
+                    WIN_BIG_H-5, WIN_BIG_W/2, 2)
 
         # Show Card Detection
         draw_attributes(img_raw, Cards)
