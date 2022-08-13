@@ -158,7 +158,7 @@ if __name__ == '__main__':
         else:
             cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
 
-        # show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading detection")
+        show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading detection")
         # show_img_from_cards([Cards[0]], "warp", "Flatten")
         # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey")
         # show_img_from_cards([Cards[0]], "warp_thresh", "Flatten threshold")
