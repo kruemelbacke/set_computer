@@ -17,11 +17,12 @@ class CCardClassifier:
     def determine_attributes(self, card):
         """ Determines attributes of given qcard """
         self.preprocess_card_img(card)
-        self.correct_white_balance(card)
-        self.calc_number(card)
-        self.calc_symbol(card)
-        self.calc_color(card)
-        self.calc_shading(card)
+        if len(card.symbol_contours) > 0:
+            self.correct_white_balance(card)
+            self.calc_number(card)
+            self.calc_symbol(card)
+            self.calc_color(card)
+            self.calc_shading(card)
 
         return card
 
@@ -66,36 +67,34 @@ class CCardClassifier:
 
     def calc_number(self, card):
         """ Calculates number of symbols by analyzing num of symbol contours"""
-        if len(card.symbol_contours) > 0 and len(card.symbol_contours) <= 3:
+        if len(card.symbol_contours) <= 3:
             card.attributes["number"] = len(card.symbol_contours)
 
     def calc_symbol(self, card):
         """Determines symbol by comparing reference symbols"""
-        if len(card.symbol_contours) > 0:
-            # Extract first symbol
-            x,y,w,h = cv.boundingRect(card.symbol_contours[0])
-            symbol_qcard = card.symbol_mask[y:y+h, x:x+w]
-            card.attributes["symbol"] = self.compare_symbol_reference(symbol_qcard)
+        # Extract first symbol
+        x,y,w,h = cv.boundingRect(card.symbol_contours[0])
+        symbol_qcard = card.symbol_mask[y:y+h, x:x+w]
+        card.attributes["symbol"] = self.compare_symbol_reference(symbol_qcard)
 
     def calc_shading(self, card):
-        if len(card.symbol_contours) > 0:
-            img = card.warp_white_balanced
-            # Extract first symbol
-            x,y,w,h = cv.boundingRect(card.symbol_contours[0])
+        img = card.warp_white_balanced
+        # Extract first symbol
+        x,y,w,h = cv.boundingRect(card.symbol_contours[0])
 
-            card.warp_symbol_center_boxes = card.warp_white_balanced.copy()
+        card.warp_symbol_center_boxes = card.warp_white_balanced.copy()
 
-            # Pick only small part of symbol center
-            center_box = img[
-                int(y+0.4*h):int(y+0.6*h),
-                int(x+0.4*w):int(x+0.6*w)
-            ]
+        # Pick only small part of symbol center
+        center_box = img[
+            int(y+0.4*h):int(y+0.6*h),
+            int(x+0.4*w):int(x+0.6*w)
+        ]
 
-            # Draw small part of smbol into img
-            cv.rectangle(card.warp_symbol_center_boxes,
-                (int(x+0.4*w),int(y+0.4*h)),(int(x+0.6*w),int(y+0.6*h)),(0,0,0), 2)
-            cv.rectangle(card.warp_symbol_center_boxes,
-                (int(x+0.4*w),int(y+0.4*h)),(int(x+0.6*w),int(y+0.6*h)),(0,255,255), 1)
+        # Draw small part of smbol into img
+        cv.rectangle(card.warp_symbol_center_boxes,
+            (int(x+0.4*w),int(y+0.4*h)),(int(x+0.6*w),int(y+0.6*h)),(0,0,0), 2)
+        cv.rectangle(card.warp_symbol_center_boxes,
+            (int(x+0.4*w),int(y+0.4*h)),(int(x+0.6*w),int(y+0.6*h)),(0,255,255), 1)
 
         center_box_hsv = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HSV)
         saturation = center_box_hsv[:, :, 1].mean()
