@@ -143,12 +143,6 @@ if __name__ == '__main__':
             cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
         cv.setMouseCallback("CardDetection", mouse_callback)
 
-        if set_counter > 2:
-            while mouse_clicked is False:
-                pass
-            mouse_clicked = False
-            set_counter = 0
-
         # show_img_from_cards(Cards, "warp_symbol_center_boxes")
 
         # show_img_from_cards([Cards[0]], "warp")
@@ -167,4 +161,10 @@ if __name__ == '__main__':
         else:
             cv.waitKey(0)
             break
+
+        if set_counter > 2:
+            while mouse_clicked is False:
+                pass
+            mouse_clicked = False
+            set_counter = 0
 
