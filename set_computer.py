@@ -22,9 +22,10 @@ if TARGET:
 
     COUNTER_CERTAINTY = 2
 else:
-    IMG_PATH = "Imgs/2022-08-14_12-16-12.png" # purple is rather black
+    # IMG_PATH = "Imgs/2022-08-14_12-16-12.png" # purple is rather black
     # IMG_PATH = "Imgs/2022-08-11_14-42-06.png" # wrong card on field
     # IMG_PATH = "Imgs/2022-08-10_18-33-38.png" # strong warm and cold light
+    IMG_PATH = "Imgs/2022-08-14_13-56-08.png" # red quite dark
 
     WIN_FLATTEN_W = 200
     WIN_FLATTEN_H = 300
