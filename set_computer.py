@@ -1,7 +1,7 @@
+import sys
 import cv2 as cv
 import numpy as np
 import set_engine
-import time
 
 from card_detection import CCardDetector
 
@@ -119,6 +119,10 @@ def put_text(img, text, textX, textY, size=1):
     cv.putText(img, (text),
         (textX, textY-10), FONT, size, (0, 255, 0), 2, cv.LINE_AA)
 
+def exit_programm(event, x, y, flags, param):
+    if event == cv.EVENT_LBUTTONDOWN:
+        sys.exit()
+
 
 if __name__ == '__main__':
     if TARGET:
@@ -126,6 +130,11 @@ if __name__ == '__main__':
         CamStream.run()
     try:
         CardDetector = CCardDetector()
+
+        if GAMEMODE:
+            cv.namedWindow("CardDetection", cv.WND_PROP_FULLSCREEN)
+            cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
+            cv.setMouseCallback("CardDetection", exit_programm)
 
         set_counter = 0
         while True:
@@ -158,8 +167,6 @@ if __name__ == '__main__':
             draw_num_of_cards(img_raw, Cards)
 
             if GAMEMODE:
-                cv.namedWindow("CardDetection", cv.WND_PROP_FULLSCREEN)
-                cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
                 cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
             else:
                 cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
