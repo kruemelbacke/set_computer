@@ -20,7 +20,7 @@ if TARGET:
     WIN_BIG_W = 600
     WIN_BIG_H = 360
 
-    COUNTER_CERTAINTY = 1
+    COUNTER_CERTAINTY = 2
 else:
     IMG_PATH = "Imgs/2022-08-14_12-16-12.png" # purple is rather black
     # IMG_PATH = "Imgs/2022-08-11_14-42-06.png" # wrong card on field
