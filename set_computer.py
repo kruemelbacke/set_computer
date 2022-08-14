@@ -34,8 +34,8 @@ if GAMEMODE:
     #WIN_BIG_W = 800
     #WIN_BIG_H = 480
 
-    WIN_BIG_W = 780
-    WIN_BIG_H = 480
+    WIN_BIG_W = 800
+    WIN_BIG_H = 460
 
 
 FONT = cv.FONT_HERSHEY_SIMPLEX
