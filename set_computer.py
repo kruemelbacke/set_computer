@@ -189,5 +189,6 @@ if __name__ == '__main__':
                 cv.waitKey(0)
                 break
     finally:
+        cv.destroyAllWindows()
         if TARGET:
             CamStream.stop()
