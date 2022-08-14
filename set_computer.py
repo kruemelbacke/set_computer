@@ -6,8 +6,8 @@ import time
 from card_detection import CCardDetector
 
 ###########################################
-TARGET = True
-GAMEMODE = True
+TARGET = False
+GAMEMODE = False
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
@@ -20,13 +20,20 @@ if TARGET:
 
     WIN_BIG_W = 600
     WIN_BIG_H = 360
+
+    COUNTER_CERTAINTY = 3
 else:
-    IMG_PATH = "Imgs/2022-08-11_14-42-08.png"
+    IMG_PATH = "Imgs/2022-08-14_12-16-12.png" # purple is rather black
+    # IMG_PATH = "Imgs/2022-08-11_14-42-06.png" # wrong card on field
+    # IMG_PATH = "Imgs/2022-08-10_18-33-38.png" # strong warm and cold light
+
     WIN_FLATTEN_W = 200
     WIN_FLATTEN_H = 300
 
     WIN_BIG_W = 1280
     WIN_BIG_H = 720
+
+    COUNTER_CERTAINTY = 1
 
 if GAMEMODE:
     WIN_FLATTEN_W = 100
@@ -35,7 +42,7 @@ if GAMEMODE:
     WIN_BIG_W = 800
     WIN_BIG_H = 480
 
-COUNTER_CERTAINTY = 3
+
 FONT = cv.FONT_HERSHEY_SIMPLEX
 
 def draw_card_contours(raw: list, qcards: list, color: tuple):
@@ -141,8 +148,10 @@ if __name__ == '__main__':
                         draw_card_contours(img_raw, set_cards, (0, 255, 0))
                         show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
             else:
+                if set_counter >= COUNTER_CERTAINTY:
+                    cv.destroyWindow("Found SET")
                 set_counter = 0
-                cv.destroyWindow("Found SET")
+                
 
 
             draw_num_of_cards(img_raw, Cards)
@@ -153,7 +162,8 @@ if __name__ == '__main__':
                 cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
             else:
                 cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
-                show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading detection")
+                # show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading Detection")
+                show_img_from_cards(Cards, "warp_color_detection", "Color Detection")
                 # show_img_from_cards([Cards[0]], "warp", "Flatten")
                 # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey")
                 # show_img_from_cards([Cards[0]], "warp_thresh", "Flatten threshold")

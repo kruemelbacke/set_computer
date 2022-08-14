@@ -32,6 +32,7 @@ class CQueryCard(set_engine.CCard):
         self.symbol_mask = [] # symbols as white on black background
         self.warp_white_balanced = []
         self.warp_symbol_center_boxes = []
+        self.warp_color_detection = []
 
     def flattener(self, raw, pts, w, h):
         """Flattens an img_raw of a card into a top-down 200x300 perspective."""

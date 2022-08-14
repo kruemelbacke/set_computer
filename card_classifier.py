@@ -117,7 +117,10 @@ class CCardClassifier:
 
 
     def calc_color(self, card):
+        # convert 3-channel to 1-channel
         inner_mask, _, _ = cv.split(card.symbol_mask)
+        
+        # calc mean of each color channel inside the symbol contour
         mean_b, mean_g, mean_r, _ = cv.mean(card.warp_white_balanced, mask=inner_mask)
         color_means = {
             "red" : mean_r,
@@ -125,16 +128,27 @@ class CCardClassifier:
             "purple" : mean_b
         }
         max_color = max(color_means, key=color_means.get)
-        min_color = min(color_means, key=color_means.get)
 
-        if max_color == "green":
-            result_color = "green"
-        elif max_color == "purple" or min_color == "green":
-            result_color = "purple"
+        warp_hsv = cv.cvtColor(np.float32(card.warp_white_balanced),\
+             cv.COLOR_BGR2HSV)
+
+        min_value = np.amin(warp_hsv[:, :, 2])
+
+        if min_value < 0.2:
+            card.attributes["color"] = "purple"
         else:
-            result_color = "red"
+            card.attributes["color"] = max_color
 
-        card.attributes["color"] = result_color
+        card.warp_color_detection = card.warp_white_balanced.copy()
+        cv.putText(card.warp_color_detection, f"Mean B: {mean_b:0.3f}", (5, 20), \
+            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+        cv.putText(card.warp_color_detection, f"Mean G: {mean_g:0.3f}", (5, 40), \
+            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+        cv.putText(card.warp_color_detection, f"Mean R: {mean_r:0.3f}", (5, 60), \
+            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+        cv.putText(card.warp_color_detection, f"Min Val: {min_value:0.2f}", (5, 80), \
+            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+
 
     def compare_symbol_reference(self, symbol_qcard):
         """Compare symbol on card with reference symbol
