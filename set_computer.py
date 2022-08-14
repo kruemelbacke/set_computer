@@ -31,7 +31,10 @@ if GAMEMODE:
     WIN_FLATTEN_W = 100
     WIN_FLATTEN_H = 150
 
-    WIN_BIG_W = 800
+    #WIN_BIG_W = 800
+    #WIN_BIG_H = 480
+
+    WIN_BIG_W = 780
     WIN_BIG_H = 480
 
 
@@ -113,63 +116,63 @@ def put_text(img, text, textX, textY, size=1):
 
 
 if __name__ == '__main__':
-        if TARGET:
-            CamStream = CCameraStream(res=(1280, 720), fps=10)
-            CamStream.run()
-        try:
-            CardDetector = CCardDetector()
+    if TARGET:
+        CamStream = CCameraStream(res=(1280, 720), fps=10)
+        CamStream.run()
+    try:
+        CardDetector = CCardDetector()
 
-            set_counter = 0
-            while True:
-                if TARGET:
-                    img_raw = CamStream.get()
-                else:
-                    img_raw = cv.imread(IMG_PATH)
-
-                Cards = CardDetector.get_cards_from_img(img_raw)
-                draw_card_contours(img_raw, Cards, (0, 0, 255))
-                draw_attributes(img_raw, Cards)
-
-                set_cards = set_engine.find_set_primitive_loop(Cards)
-
-                if len(set_cards) == 3:
-                    set_counter += 1
-                    if set_counter > 1:
-                        # SET found!
-                        draw_card_contours(img_raw, set_cards, (0, 255, 0))
-                        show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
-                else:
-                    set_counter = 0
-                    cv.destroyWindow("Found SET")
-
-
-                draw_num_of_cards(img_raw, Cards)
-
-                if GAMEMODE:
-                    cv.namedWindow("CardDetection", cv.WND_PROP_FULLSCREEN)
-                    cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
-                    cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
-                else:
-                    cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
-                    show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading detection")
-                    # show_img_from_cards([Cards[0]], "warp", "Flatten")
-                    # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey")
-                    # show_img_from_cards([Cards[0]], "warp_thresh", "Flatten threshold")
-                    # show_img_from_cards([Cards[0]], "symbol_mask", "Symbol mask")
-                    # show_img_from_cards([Cards[0]], "warp_white_balanced", "White balanced")
-
-                if TARGET:
-                    key = cv.waitKey(1) & 0xFF
-
-                    # if `q` key was pressed, break from the loop
-                    if key == ord("q"):
-                        break
-
-                else:
-                    cv.waitKey(0)
-                    break
-        finally:
+        set_counter = 0
+        while True:
             if TARGET:
-                CamStream.stop()
+                img_raw = CamStream.get()
+            else:
+                img_raw = cv.imread(IMG_PATH)
+
+            Cards = CardDetector.get_cards_from_img(img_raw)
+            draw_card_contours(img_raw, Cards, (0, 0, 255))
+            draw_attributes(img_raw, Cards)
+
+            set_cards = set_engine.find_set_primitive_loop(Cards)
+
+            if len(set_cards) == 3:
+                set_counter += 1
+                if set_counter > 1:
+                    # SET found!
+                    draw_card_contours(img_raw, set_cards, (0, 255, 0))
+                    show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
+            else:
+                set_counter = 0
+                cv.destroyWindow("Found SET")
+
+
+            draw_num_of_cards(img_raw, Cards)
+
+            if GAMEMODE:
+                #cv.namedWindow("CardDetection", cv.WND_PROP_FULLSCREEN)
+                #cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
+                cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
+            else:
+                cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
+                show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading detection")
+                # show_img_from_cards([Cards[0]], "warp", "Flatten")
+                # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey")
+                # show_img_from_cards([Cards[0]], "warp_thresh", "Flatten threshold")
+                # show_img_from_cards([Cards[0]], "symbol_mask", "Symbol mask")
+                # show_img_from_cards([Cards[0]], "warp_white_balanced", "White balanced")
+
+            if TARGET:
+                key = cv.waitKey(1) & 0xFF
+
+                # if `q` key was pressed, break from the loop
+                if key == ord("q"):
+                    break
+
+            else:
+                cv.waitKey(0)
+                break
+    finally:
+        if TARGET:
+            CamStream.stop()
 
 
