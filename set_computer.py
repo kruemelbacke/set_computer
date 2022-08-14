@@ -44,6 +44,7 @@ if GAMEMODE:
 
 
 FONT = cv.FONT_HERSHEY_SIMPLEX
+exit_request = False
 
 def draw_card_contours(raw: list, qcards: list, color: tuple):
     # Draw card contours on image (have to do contours all at once or
@@ -121,7 +122,8 @@ def put_text(img, text, textX, textY, size=1):
 
 def exit_programm(event, x, y, flags, param):
     if event == cv.EVENT_LBUTTONDOWN:
-        sys.exit()
+        global exit_request
+        exit_request = True
 
 
 if __name__ == '__main__':
@@ -182,7 +184,7 @@ if __name__ == '__main__':
                 key = cv.waitKey(1) & 0xFF
 
                 # if `q` key was pressed, break from the loop
-                if key == ord("q"):
+                if key == ord("q") or exit_request is True:
                     break
 
             else:
