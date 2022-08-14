@@ -81,7 +81,7 @@ if __name__ == '__main__':
                 set_counter += 1
                 if set_counter == COUNTER_CERTAINTY:
                     # SET found!
-                    playsound("set_audio_sample.wav", False)
+                    playsound("set_audio_sample.wav")
 
                 if set_counter >= COUNTER_CERTAINTY:
                     draw_card_contours(img_raw, set_cards, (0, 255, 0))
