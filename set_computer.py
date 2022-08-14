@@ -141,10 +141,6 @@ if __name__ == '__main__':
                         draw_card_contours(img_raw, set_cards, (0, 255, 0))
                         show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
             else:
-                if set_counter >= COUNTER_CERTAINTY:
-                    draw_card_contours(img_raw, set_cards, (0, 255, 0))
-                    show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
-                    time.sleep(4)
                 set_counter = 0
                 cv.destroyWindow("Found SET")
 
