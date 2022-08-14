@@ -6,8 +6,8 @@ import time
 from card_detection import CCardDetector
 
 ###########################################
-TARGET = False
-GAMEMODE = False
+TARGET = True
+GAMEMODE = True
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
