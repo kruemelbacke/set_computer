@@ -1,6 +1,7 @@
 import cv2 as cv
 import numpy as np
 import set_engine
+import time
 
 from card_detection import CCardDetector
 
@@ -31,13 +32,10 @@ if GAMEMODE:
     WIN_FLATTEN_W = 100
     WIN_FLATTEN_H = 150
 
-    #WIN_BIG_W = 800
-    #WIN_BIG_H = 480
-
     WIN_BIG_W = 800
-    WIN_BIG_H = 460
+    WIN_BIG_H = 480
 
-
+COUNTER_CERTAINTY = 3
 FONT = cv.FONT_HERSHEY_SIMPLEX
 
 def draw_card_contours(raw: list, qcards: list, color: tuple):
@@ -137,11 +135,14 @@ if __name__ == '__main__':
 
             if len(set_cards) == 3:
                 set_counter += 1
-                if set_counter > 1:
+                if set_counter == COUNTER_CERTAINTY:
                     # SET found!
-                    draw_card_contours(img_raw, set_cards, (0, 255, 0))
-                    show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
+                    if set_counter >= COUNTER_CERTAINTY:
+                        draw_card_contours(img_raw, set_cards, (0, 255, 0))
+                        show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
             else:
+                if set_counter >= COUNTER_CERTAINTY:
+                    time.sleep(4)
                 set_counter = 0
                 cv.destroyWindow("Found SET")
 
@@ -149,8 +150,8 @@ if __name__ == '__main__':
             draw_num_of_cards(img_raw, Cards)
 
             if GAMEMODE:
-                #cv.namedWindow("CardDetection", cv.WND_PROP_FULLSCREEN)
-                #cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
+                cv.namedWindow("CardDetection", cv.WND_PROP_FULLSCREEN)
+                cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
                 cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
             else:
                 cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
@@ -174,5 +175,3 @@ if __name__ == '__main__':
     finally:
         if TARGET:
             CamStream.stop()
-
-
