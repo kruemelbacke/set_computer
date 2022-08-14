@@ -1,12 +1,13 @@
 import cv2 as cv
-import set_engine
+from playsound import playsound
 
+import set_engine
 from card_detection import CCardDetector
 from utilities import draw_card_contours, draw_attributes, draw_num_of_cards, show_img_from_cards
 
 ###########################################
-TARGET = True
-GAMEMODE = True
+TARGET = False
+GAMEMODE = False
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
@@ -79,9 +80,8 @@ if __name__ == '__main__':
             if len(set_cards) == 3:
                 set_counter += 1
                 if set_counter == COUNTER_CERTAINTY:
-                    pass
                     # SET found!
-                    # TODO: play sound
+                    playsound("set_audio_sample.wav")
 
                 if set_counter >= COUNTER_CERTAINTY:
                     draw_card_contours(img_raw, set_cards, (0, 255, 0))
