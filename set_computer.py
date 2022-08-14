@@ -21,7 +21,7 @@ if TARGET:
     WIN_BIG_W = 600
     WIN_BIG_H = 360
 
-    COUNTER_CERTAINTY = 3
+    COUNTER_CERTAINTY = 1
 else:
     IMG_PATH = "Imgs/2022-08-14_12-16-12.png" # purple is rather black
     # IMG_PATH = "Imgs/2022-08-11_14-42-06.png" # wrong card on field
@@ -143,13 +143,13 @@ if __name__ == '__main__':
             if len(set_cards) == 3:
                 set_counter += 1
                 if set_counter == COUNTER_CERTAINTY:
-                    show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
+                    pass
                     # SET found!
                     # TODO: play sound
 
                 if set_counter >= COUNTER_CERTAINTY:
                     draw_card_contours(img_raw, set_cards, (0, 255, 0))
-                    
+                    show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
             else:
                 if set_counter >= COUNTER_CERTAINTY:
                     cv.destroyWindow("Found SET")
