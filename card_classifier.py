@@ -124,7 +124,17 @@ class CCardClassifier:
             "green" : mean_g,
             "purple" : mean_b
         }
-        card.attributes["color"] = max(color_means, key=color_means.get)
+        max_color = max(color_means, key=color_means.get)
+        min_color = min(color_means, key=color_means.get)
+
+        if max_color == "green":
+            result_color = "green"
+        elif max_color == "purple" or min_color == "green":
+            result_color = "purple"
+        else:
+            result_color = "red"
+
+        card.attributes["color"] = result_color
 
     def compare_symbol_reference(self, symbol_qcard):
         """Compare symbol on card with reference symbol
