@@ -1,9 +1,8 @@
-import sys
 import cv2 as cv
-import numpy as np
 import set_engine
 
 from card_detection import CCardDetector
+from utilities import draw_card_contours, draw_attributes, draw_num_of_cards, show_img_from_cards
 
 ###########################################
 TARGET = True
@@ -42,83 +41,8 @@ if GAMEMODE:
     WIN_BIG_W = 800
     WIN_BIG_H = 480
 
-
-FONT = cv.FONT_HERSHEY_SIMPLEX
 exit_request = False
 
-def draw_card_contours(raw: list, qcards: list, color: tuple):
-    # Draw card contours on image (have to do contours all at once or
-    # they do not show up properly for some reason)
-    if len(qcards) > 0:
-        temp_cnts = []
-        for qcard in qcards:
-            temp_cnts.append(qcard.contour)
-        cv.drawContours(raw,temp_cnts, -1, (0,0,0), 3)
-        cv.drawContours(raw,temp_cnts, -1, color, 2)
-
-def draw_num_of_cards(raw, qcards):
-    cv.putText(raw, (f"Detected Cards: {len(qcards)}"),
-            (3, 24), FONT, 1, (255, 255, 0), 2, cv.LINE_AA)
-
-
-def draw_attributes(raw: list, qcards: list):
-    """Draw the card name, center point, and contour on the camera img_raw."""
-
-    for qcard in qcards:
-        x = qcard.center[0]
-        y = qcard.center[1]
-
-    #     cv.circle(raw, (x, y), 5, (0, 255, 0), -1)
-
-        put_text_centered(raw, f"{qcard.get_number()}", x, y-40)
-        put_text_centered(raw, f"{qcard.get_symbol()}", x, y-10)
-        put_text_centered(raw, f"{qcard.get_color()}", x, y+20)
-        put_text_centered(raw, f"{qcard.get_shading()}", x, y+50)
-
-    cv.putText(raw, (f"Detected Cards: {len(qcards)}"),
-            (3, 24), FONT, 1, (255, 255, 0), 2, cv.LINE_AA)
-
-
-def show_img_from_cards(qcards: list, img_name: str, win_name: str):
-    imgs = get_img_from_cards(qcards, img_name)
-
-    if len(qcards) == 1:
-        cv.imshow(win_name, imgs[0])
-
-    if len(qcards) > 1:
-        cv.imshow(win_name, np.hstack(imgs))
-
-
-def get_img_from_cards(qcards: list, img_name: str):
-    img_list = []
-    for card in qcards:
-        img_list.append(cv.resize(getattr(card, img_name), (WIN_FLATTEN_W, WIN_FLATTEN_H)))
-    return tuple(img_list)
-
-
-def put_text_centered(img, text, center_x, center_y, size=1):
-    """Put text into the given img centered to given x and y coordinates"""
-    # get boundary of the text
-    textsize = cv.getTextSize(text, FONT, 1, 2)[0]
-
-    # get coords based on boundary
-    textX = int(center_x - textsize[0] / 2)
-    textY = int(center_y + textsize[1] / 2)
-
-    # Draw text twice, so letters have black outline
-    cv.putText(img, (text),
-        (textX, textY-10), FONT, size, (0, 0, 0), 3, cv.LINE_AA)
-    cv.putText(img, (text),
-        (textX, textY-10), FONT, size, (50, 200, 200), 2, cv.LINE_AA)
-
-
-def put_text(img, text, textX, textY, size=1):
-    """Put text into the given img centered to given x and y coordinates"""
-    # Draw text twice, so letters have black outline
-    cv.putText(img, (text),
-        (textX, textY-10), FONT, size, (0, 0, 0), 3, cv.LINE_AA)
-    cv.putText(img, (text),
-        (textX, textY-10), FONT, size, (0, 255, 0), 2, cv.LINE_AA)
 
 def exit_programm(event, x, y, flags, param):
     if event == cv.EVENT_LBUTTONDOWN:
@@ -160,7 +84,8 @@ if __name__ == '__main__':
 
                 if set_counter >= COUNTER_CERTAINTY:
                     draw_card_contours(img_raw, set_cards, (0, 255, 0))
-                    show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
+                    show_img_from_cards(set_cards, "warp_white_balanced", \
+                        "Found SET", (WIN_FLATTEN_W, WIN_FLATTEN_H))
             else:
                 if set_counter >= COUNTER_CERTAINTY:
                     cv.destroyWindow("Found SET")
@@ -172,13 +97,21 @@ if __name__ == '__main__':
                 cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
             else:
                 cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
-                # show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading Detection")
-                show_img_from_cards(Cards, "warp_color_detection", "Color Detection")
-                # show_img_from_cards([Cards[0]], "warp", "Flatten")
-                # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey")
-                # show_img_from_cards([Cards[0]], "warp_thresh", "Flatten threshold")
-                # show_img_from_cards([Cards[0]], "symbol_mask", "Symbol mask")
-                # show_img_from_cards([Cards[0]], "warp_white_balanced", "White balanced")
+
+                # show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading Detection", \
+                    # (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                show_img_from_cards(Cards, "warp_color_detection", "Color Detection", \
+                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                # show_img_from_cards([Cards[0]], "warp", "Flatten", \
+                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey", \
+                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                # show_img_from_cards([Cards[0]], "warp_thresh", "Flatten threshold", \
+                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                # show_img_from_cards([Cards[0]], "symbol_mask", "Symbol mask", \
+                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                # show_img_from_cards([Cards[0]], "warp_white_balanced", "White balanced", \
+                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
 
             if TARGET:
                 key = cv.waitKey(1) & 0xFF
