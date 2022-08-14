@@ -144,6 +144,8 @@ if __name__ == '__main__':
                 set_counter += 1
                 if set_counter == COUNTER_CERTAINTY:
                     # SET found!
+                    # TODO: play sound
+
                     if set_counter >= COUNTER_CERTAINTY:
                         draw_card_contours(img_raw, set_cards, (0, 255, 0))
                         show_img_from_cards(set_cards, "warp_white_balanced", "Found SET")
@@ -151,8 +153,6 @@ if __name__ == '__main__':
                 if set_counter >= COUNTER_CERTAINTY:
                     cv.destroyWindow("Found SET")
                 set_counter = 0
-                
-
 
             draw_num_of_cards(img_raw, Cards)
 
