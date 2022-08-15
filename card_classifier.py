@@ -134,8 +134,8 @@ class CCardClassifier:
 
         min_value = np.amin(warp_hsv[:, :, 2])
 
-        if min_value < 0.05:
-            card.attributes["color"] = "purple"
+        if min_value < 0.1:
+            card.attributes["color"] = ""
         else:
             card.attributes["color"] = max_color
 
