@@ -7,7 +7,7 @@ from utilities import draw_card_contours, draw_attributes, draw_num_of_cards, sh
 
 ###########################################
 TARGET = True
-GAMEMODE = True
+GAMEMODE = False
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
