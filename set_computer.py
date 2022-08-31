@@ -126,5 +126,6 @@ if __name__ == '__main__':
                 break
     finally:
         cv.destroyAllWindows()
+        CardDetector.stop()
         if TARGET:
             CamStream.stop()
