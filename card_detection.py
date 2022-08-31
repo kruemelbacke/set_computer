@@ -122,11 +122,11 @@ class CCardDetector:
         # Find the contours of all cards in the img_raw (query cards)
         qcards = self.__find_cards(self.thresh, raw)
 
-        with Pool(12) as p:
-            # Calc attributes of cards on game field
-            qcards = p.map(self.CardClassifier.determine_attributes, qcards)
+        # with Pool(12) as p:
+        #     # Calc attributes of cards on game field
+        #     qcards = p.map(self.CardClassifier.determine_attributes, qcards)
 
-        # qcards = list(map(self.CardClassifier.determine_attributes, qcards))
+        qcards = list(map(self.CardClassifier.determine_attributes, qcards))
 
         return list(filter(self.card_is_correct, qcards))
 
