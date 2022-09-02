@@ -73,7 +73,6 @@ if __name__ == '__main__':
 
             Cards = CardDetector.get_cards_from_img(img_raw)
             draw_card_contours(img_raw, Cards, (0, 0, 255))
-            draw_attributes(img_raw, Cards)
 
             set_cards = set_engine.find_set_primitive_loop(Cards)
 
@@ -92,6 +91,7 @@ if __name__ == '__main__':
                     cv.destroyWindow("Found SET")
                 set_counter = 0
 
+            draw_attributes(img_raw, Cards)
             draw_num_of_cards(img_raw, Cards)
 
             if GAMEMODE:
