@@ -40,14 +40,14 @@ class CQueryCard(set_engine.CCard):
         FLATTEN_HEIGHT = 300
         print("Pts: ", pts)
         temp_rect = np.zeros((4, 2), dtype="float32")
-        
+
         summ = np.sum(pts, axis=2)
 
         tl = pts[np.argmin(summ)]
         br = pts[np.argmax(summ)]
 
         diff = np.diff(pts, axis=-1)
-        print("Diff", diff)
+
         tr = pts[np.argmin(diff)]
         bl = pts[np.argmax(diff)]
 
@@ -59,12 +59,13 @@ class CQueryCard(set_engine.CCard):
             temp_rect[1] = tr
             temp_rect[2] = br
             temp_rect[3] = bl
-
+            print(f"w {w}, h {h}, Vert, tl {tl}, tr {tr}, br {br}, bl {bl}")
         if w >= 1.2*h:  # If card is horizontally oriented
             temp_rect[0] = bl
             temp_rect[1] = tl
             temp_rect[2] = tr
             temp_rect[3] = br
+            print(f"w {w}, h {h}, Hori, tl {tl}, tr {tr}, br {br}, bl {bl}")
 
         # If the card is 'diamond' oriented, a different algorithm
         # has to be used to identify which point is top left, top right
