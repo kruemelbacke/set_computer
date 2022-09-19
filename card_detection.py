@@ -147,6 +147,9 @@ class CCardDetector:
         # Detect edges using Canny
         # thresh = cv.Canny(thresh, thresh_val, thresh_val * 2)
 
+        cv.imshow("GreyBlur", blur)
+        cv.imshow("Binary", thresh)
+
         return grey, blur, thresh
 
 
