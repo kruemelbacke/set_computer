@@ -38,7 +38,7 @@ class CQueryCard(set_engine.CCard):
         """Flattens an img_raw of a card into a top-down 200x300 perspective."""
         FLATTEN_WIDTH = 200
         FLATTEN_HEIGHT = 300
-        print("Pts: "pts)
+        print("Pts: ", pts)
         temp_rect = np.zeros((4, 2), dtype="float32")
         
         summ = np.sum(pts, axis=2)
