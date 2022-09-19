@@ -91,7 +91,7 @@ if __name__ == '__main__':
                     cv.destroyWindow("Found SET")
                 set_counter = 0
 
-            draw_attributes(img_raw, Cards)
+            # draw_attributes(img_raw, Cards)
             draw_num_of_cards(img_raw, Cards)
 
             if GAMEMODE:
