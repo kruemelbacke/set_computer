@@ -41,12 +41,13 @@ class CQueryCard(set_engine.CCard):
 
         temp_rect = np.zeros((4, 2), dtype="float32")
 
-        s = np.sum(pts, axis=2)
+        summ = np.sum(pts, axis=2)
 
-        tl = pts[np.argmin(s)]
-        br = pts[np.argmax(s)]
+        tl = pts[np.argmin(summ)]
+        br = pts[np.argmax(summ)]
 
         diff = np.diff(pts, axis=-1)
+
         tr = pts[np.argmin(diff)]
         bl = pts[np.argmax(diff)]
 
