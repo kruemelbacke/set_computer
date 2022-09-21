@@ -111,8 +111,8 @@ if __name__ == '__main__':
                 #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
                 # show_img_from_cards([Cards[0]], "symbol_mask", "Symbol mask", \
                 #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                show_img_from_cards([Cards[0]], "warp_white_balanced", "White balanced", \
-                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                # show_img_from_cards([Cards[0]], "warp_white_balanced", "White balanced", \
+                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
 
             if TARGET:
                 key = cv.waitKey(1) & 0xFF
