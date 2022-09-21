@@ -88,7 +88,7 @@ class CQueryCard(set_engine.CCard):
                 temp_rect[1] = pts[3][0]  # Top right
                 temp_rect[2] = pts[2][0]  # Bottom right
                 temp_rect[3] = pts[1][0]  # Bottom left
-        # else:
+        else:
             return None
 
         # create transform matrix and warp card image
