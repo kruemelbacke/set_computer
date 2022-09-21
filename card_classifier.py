@@ -20,7 +20,7 @@ class CCardClassifier:
             return card
         self.preprocess_card_img(card)
         if len(card.symbol_contours) > 0:
-            self.correct_white_balance(card)
+
             self.calc_number(card)
             self.calc_symbol(card)
             self.calc_color(card)
@@ -34,13 +34,14 @@ class CCardClassifier:
         inner_mask, _, _ = cv.split(card.symbol_mask)
         white_b, white_g, white_r, _ = cv.mean(card.warp, mask=~inner_mask)
 
+
         img_b, img_g, img_r = cv.split(card.warp)
 
         img_b = img_b / white_b
         img_g = img_g / white_g
         img_r = img_r / white_r
 
-        card.warp_white_balanced = cv.merge([img_b, img_g, img_r])
+        card.warp_white_balanced = np.clip(cv.merge([img_b, img_g, img_r]),0,1)
 
     def preprocess_card_img(self, card):
         """Preprocess flatten card image"""
@@ -65,6 +66,8 @@ class CCardClassifier:
         card.warp_grey = blur
         card.warp_thresh = thresh
         card.symbol_mask = mask
+
+        self.correct_white_balance(card)
 
 
     def calc_number(self, card):
