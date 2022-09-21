@@ -38,7 +38,7 @@ class CQueryCard(set_engine.CCard):
         """Flattens an img_raw of a card into a top-down 200x300 perspective."""
         FLATTEN_WIDTH = 200
         FLATTEN_HEIGHT = 300
-        print("Pts: ", pts)
+        # print("Pts: ", pts)
         temp_rect = np.zeros((4, 2), dtype="float32")
 
         summ = np.sum(pts, axis=2)
@@ -54,42 +54,42 @@ class CQueryCard(set_engine.CCard):
         # point order
         # [topleft, topright, bottomright, bottomleft]
 
-        # if width <= 0.8*height:  # if card is oriented vertically
-        #     temp_rect[0] = topleft
-        #     temp_rect[1] = topright
-        #     temp_rect[2] = bottomright
-        #     temp_rect[3] = bottomleft
-        #     #print(f"w {w}, h {h}, Vert, tl {tl}, tr {tr}, br {br}, bl {bl}")
-        # elif width >= 1.2*height:  # if card is oriented horizontally
-        #     temp_rect[0] = bottomleft
-        #     temp_rect[1] = topleft
-        #     temp_rect[2] = topright
-        #     temp_rect[3] = bottomright
-        #     #print(f"w {w}, h {h}, Hori, tl {tl}, tr {tr}, br {br}, bl {bl}")
+        if width <= 0.8*height:  # if card is oriented vertically
+            temp_rect[0] = topleft
+            temp_rect[1] = topright
+            temp_rect[2] = bottomright
+            temp_rect[3] = bottomleft
+            #print(f"w {w}, h {h}, Vert, tl {tl}, tr {tr}, br {br}, bl {bl}")
+        elif width >= 1.2*height:  # if card is oriented horizontally
+            temp_rect[0] = bottomleft
+            temp_rect[1] = topleft
+            temp_rect[2] = topright
+            temp_rect[3] = bottomright
+            #print(f"w {w}, h {h}, Hori, tl {tl}, tr {tr}, br {br}, bl {bl}")
 
         # if card is not clearly vertically or horizontal
-        # elif width > 0.8*height and width < 1.2*height:  # If card is diamond oriented
+        elif width > 0.8*height and width < 1.2*height:  # If card is diamond oriented
             # if furthest left point is higher than furthest right point,
             # card is tilted to the left.
-        if pts[1][0][1] <= pts[3][0][1]:
-            # if card is titled to the left, approxPolyDP returns points
-            # in this order: top right, top left, bottom left, bottom right
-            temp_rect[0] = pts[1][0]  # Top left
-            temp_rect[1] = pts[0][0]  # Top right
-            temp_rect[2] = pts[3][0]  # Bottom right
-            temp_rect[3] = pts[2][0]  # Bottom left
+            if pts[1][0][1] <= pts[3][0][1]:
+                # if card is titled to the left, approxPolyDP returns points
+                # in this order: top right, top left, bottom left, bottom right
+                temp_rect[0] = pts[1][0]  # Top left
+                temp_rect[1] = pts[0][0]  # Top right
+                temp_rect[2] = pts[3][0]  # Bottom right
+                temp_rect[3] = pts[2][0]  # Bottom left
 
-        # if furthest left point is lower than furthest right point,
-        # card is tilted to the right
-        if pts[1][0][1] > pts[3][0][1]:
-            # If card is titled to the right, approxPolyDP returns points
-            # in this order: top left, bottom left, bottom right, top right
-            temp_rect[0] = pts[0][0]  # Top left
-            temp_rect[1] = pts[3][0]  # Top right
-            temp_rect[2] = pts[2][0]  # Bottom right
-            temp_rect[3] = pts[1][0]  # Bottom left
-        # else:
-        #     return None
+            # if furthest left point is lower than furthest right point,
+            # card is tilted to the right
+            elif pts[1][0][1] > pts[3][0][1]:
+                # If card is titled to the right, approxPolyDP returns points
+                # in this order: top left, bottom left, bottom right, top right
+                temp_rect[0] = pts[0][0]  # Top left
+                temp_rect[1] = pts[3][0]  # Top right
+                temp_rect[2] = pts[2][0]  # Bottom right
+                temp_rect[3] = pts[1][0]  # Bottom left
+        else:
+            return None
 
         # create transform matrix and warp card image
         dst = np.array([[0, 0], [FLATTEN_WIDTH-1, 0], [FLATTEN_WIDTH-1, FLATTEN_HEIGHT-1],
