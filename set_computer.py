@@ -7,7 +7,7 @@ from utilities import draw_card_contours, draw_attributes, draw_num_of_cards, sh
 
 ###########################################
 TARGET = True
-GAMEMODE = True
+GAMEMODE = False
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
@@ -26,7 +26,7 @@ else:
     # IMG_PATH = "Imgs/2022-08-14_12-16-12.png" # purple is rather black
     # IMG_PATH = "Imgs/2022-08-11_14-42-06.png" # wrong card on field
     # IMG_PATH = "Imgs/2022-08-10_18-33-38.png" # strong warm and cold light
-    IMG_PATH = "Imgs/2022-08-14_13-56-08.png" # red quite dark
+    IMG_PATH = "Imgs/Original.png"
 
     WIN_FLATTEN_W = 200
     WIN_FLATTEN_H = 300
@@ -101,10 +101,10 @@ if __name__ == '__main__':
 
                 # show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading Detection", \
                     # (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                show_img_from_cards(Cards, "warp_color_detection", "Color Detection", \
-                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                # show_img_from_cards([Cards[0]], "warp", "Flatten", \
+                # show_img_from_cards(Cards, "warp_color_detection", "Color Detection", \
                 #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                show_img_from_cards(Cards, "warp", "Flatten", \
+                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
                 # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey", \
                 #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
                 # show_img_from_cards([Cards[0]], "warp_thresh", "Flatten threshold", \

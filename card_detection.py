@@ -34,7 +34,7 @@ class CQueryCard(set_engine.CCard):
         self.warp_symbol_center_boxes = []
         self.warp_color_detection = []
 
-    def flattener(self, raw, pts, w, h):
+    def flattener(self, raw, pts, width, height):
         """Flattens an img_raw of a card into a top-down 200x300 perspective."""
         FLATTEN_WIDTH = 200
         FLATTEN_HEIGHT = 300
@@ -43,57 +43,55 @@ class CQueryCard(set_engine.CCard):
 
         summ = np.sum(pts, axis=2)
 
-        tl = pts[np.argmin(summ)]
-        br = pts[np.argmax(summ)]
+        topleft = pts[np.argmin(summ)]
+        bottomright = pts[np.argmax(summ)]
 
         diff = np.diff(pts, axis=-1)
 
-        tr = pts[np.argmin(diff)]
-        bl = pts[np.argmax(diff)]
+        topright = pts[np.argmin(diff)]
+        bottomleft = pts[np.argmax(diff)]
 
-        # Need to create an array listing points in order of
-        # [top left, top right, bottom right, bottom left]
+        # point order
+        # [topleft, topright, bottomright, bottomleft]
 
-        if w <= 0.8*h:  # If card is vertically oriented
-            temp_rect[0] = tl
-            temp_rect[1] = tr
-            temp_rect[2] = br
-            temp_rect[3] = bl
-            print(f"w {w}, h {h}, Vert, tl {tl}, tr {tr}, br {br}, bl {bl}")
-        if w >= 1.2*h:  # If card is horizontally oriented
-            temp_rect[0] = bl
-            temp_rect[1] = tl
-            temp_rect[2] = tr
-            temp_rect[3] = br
-            print(f"w {w}, h {h}, Hori, tl {tl}, tr {tr}, br {br}, bl {bl}")
+        if width <= 0.8*height:  # if card is oriented vertically
+            temp_rect[0] = topleft
+            temp_rect[1] = topright
+            temp_rect[2] = bottomright
+            temp_rect[3] = bottomleft
+            #print(f"w {w}, h {h}, Vert, tl {tl}, tr {tr}, br {br}, bl {bl}")
+        if width >= 1.2*height:  # if card is oriented horizontally
+            temp_rect[0] = bottomleft
+            temp_rect[1] = topleft
+            temp_rect[2] = topright
+            temp_rect[3] = bottomright
+            #print(f"w {w}, h {h}, Hori, tl {tl}, tr {tr}, br {br}, bl {bl}")
+        else:
+            return None
 
-        # If the card is 'diamond' oriented, a different algorithm
-        # has to be used to identify which point is top left, top right
-        # bottom left, and bottom right.
+        # # if card is not clearly vertically or horizontal
+        # if width > 0.8*height and width < 1.2*height:  # If card is diamond oriented
+        #     # if furthest left point is higher than furthest right point,
+        #     # card is tilted to the left.
+        #     if pts[1][0][1] <= pts[3][0][1]:
+        #         # if card is titled to the left, approxPolyDP returns points
+        #         # in this order: top right, top left, bottom left, bottom right
+        #         temp_rect[0] = pts[1][0]  # Top left
+        #         temp_rect[1] = pts[0][0]  # Top right
+        #         temp_rect[2] = pts[3][0]  # Bottom right
+        #         temp_rect[3] = pts[2][0]  # Bottom left
 
-        if w > 0.8*h and w < 1.2*h:  # If card is diamond oriented
-            # If furthest left point is higher than furthest right point,
-            # card is tilted to the left.
-            if pts[1][0][1] <= pts[3][0][1]:
-                # If card is titled to the left, approxPolyDP returns points
-                # in this order: top right, top left, bottom left, bottom right
-                temp_rect[0] = pts[1][0]  # Top left
-                temp_rect[1] = pts[0][0]  # Top right
-                temp_rect[2] = pts[3][0]  # Bottom right
-                temp_rect[3] = pts[2][0]  # Bottom left
+        #     # if furthest left point is lower than furthest right point,
+        #     # card is tilted to the right
+        #     if pts[1][0][1] > pts[3][0][1]:
+        #         # If card is titled to the right, approxPolyDP returns points
+        #         # in this order: top left, bottom left, bottom right, top right
+        #         temp_rect[0] = pts[0][0]  # Top left
+        #         temp_rect[1] = pts[3][0]  # Top right
+        #         temp_rect[2] = pts[2][0]  # Bottom right
+        #         temp_rect[3] = pts[1][0]  # Bottom left
 
-            # If furthest left point is lower than furthest right point,
-            # card is tilted to the right
-            if pts[1][0][1] > pts[3][0][1]:
-                # If card is titled to the right, approxPolyDP returns points
-                # in this order: top left, bottom left, bottom right, top right
-                temp_rect[0] = pts[0][0]  # Top left
-                temp_rect[1] = pts[3][0]  # Top right
-                temp_rect[2] = pts[2][0]  # Bottom right
-                temp_rect[3] = pts[1][0]  # Bottom left
-
-        # Create destination array, calculate perspective transform matrix,
-        # and warp card img_raw
+        # create transform matrix and warp card image
         dst = np.array([[0, 0], [FLATTEN_WIDTH-1, 0], [FLATTEN_WIDTH-1, FLATTEN_HEIGHT-1],
                     [0, FLATTEN_HEIGHT-1]], np.float32)
         transform_m = cv.getPerspectiveTransform(temp_rect, dst)
@@ -123,11 +121,7 @@ class CCardDetector:
 
         # Find the contours of all cards in the img_raw (query cards)
         qcards = self.__find_cards(self.thresh, raw)
-
-        # with Pool(12) as p:
-        #     # Calc attributes of cards on game field
-        #     qcards = p.map(self.CardClassifier.determine_attributes, qcards)
-
+        
         qcards = list(map(self.CardClassifier.determine_attributes, qcards))
 
         return list(filter(self.card_is_correct, qcards))

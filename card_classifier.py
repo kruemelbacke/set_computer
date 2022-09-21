@@ -16,6 +16,8 @@ class CCardClassifier:
 
     def determine_attributes(self, card):
         """ Determines attributes of given qcard """
+        if card.warp is None:
+            return card
         self.preprocess_card_img(card)
         if len(card.symbol_contours) > 0:
             self.correct_white_balance(card)
