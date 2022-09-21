@@ -6,7 +6,7 @@ from card_detection import CCardDetector
 from utilities import draw_card_contours, draw_attributes, draw_num_of_cards, show_img_from_cards
 
 ###########################################
-TARGET = True
+TARGET = False
 GAMEMODE = False
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
@@ -91,7 +91,7 @@ if __name__ == '__main__':
                     cv.destroyWindow("Found SET")
                 set_counter = 0
 
-            # draw_attributes(img_raw, Cards)
+            draw_attributes(img_raw, Cards)
             draw_num_of_cards(img_raw, Cards)
 
             if GAMEMODE:
@@ -105,14 +105,14 @@ if __name__ == '__main__':
                 #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
                 show_img_from_cards(Cards, "warp", "Flatten", \
                     (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                # show_img_from_cards([Cards[0]], "warp_grey", "Flatten grey", \
-                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                # show_img_from_cards([Cards[0]], "warp_thresh", "Flatten threshold", \
-                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                # show_img_from_cards([Cards[0]], "symbol_mask", "Symbol mask", \
-                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                # show_img_from_cards([Cards[0]], "warp_white_balanced", "White balanced", \
-                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                show_img_from_cards([Cards[7]], "warp_grey", "Flatten grey", \
+                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                show_img_from_cards([Cards[7]], "warp_thresh", "Flatten threshold", \
+                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                show_img_from_cards([Cards[7]], "symbol_mask", "Symbol mask", \
+                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                show_img_from_cards([Cards[7]], "warp_white_balanced", "White balanced", \
+                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
 
             if TARGET:
                 key = cv.waitKey(1) & 0xFF
