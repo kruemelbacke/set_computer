@@ -72,7 +72,7 @@ class CCardClassifier:
 
     def calc_number(self, card):
         """ Calculates number of symbols by analyzing num of symbol contours"""
-        if len(card.symbol_contours) <= 3:
+        if len(card.symbol_contours) <= 3 and len(card.symbol_contours) > 0:
             card.attributes["number"] = len(card.symbol_contours)
 
     def calc_symbol(self, card):
