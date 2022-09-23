@@ -68,7 +68,7 @@ class CCardClassifier:
         card.symbol_mask = mask
 
         self.correct_white_balance(card)
-        self.gain_colors(card, 100)
+        self.gain_colors(card, 10)
 
         #######################################################################
         # temp_cnts = []
