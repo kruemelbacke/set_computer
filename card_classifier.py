@@ -68,6 +68,8 @@ class CCardClassifier:
         card.symbol_mask = mask
 
         self.correct_white_balance(card)
+        self.gain_colors(card, 1.5)
+
         #######################################################################
         # temp_cnts = []
         # for cnt in card.symbol_contours:
@@ -80,6 +82,11 @@ class CCardClassifier:
         # cv.putText(card.warp_white_balanced, (f"Number of symbols: {len(contours)}"),
         #     (5, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0,0.8,1), 1, cv.LINE_AA)
 
+    def gain_colors(self, card, factor):
+        """ Gain colors by multiplying factor and saturation in HLS col-space """
+        img_hls = cv.cvtColor(np.float32(card.warp_white_balanced), cv.COLOR_BGR2HLS)
+        img_hls[:,:,2] *= factor
+        card.warp_white_balanced = cv.cvtColor(np.float32(img_hls), cv.COLOR_HLS2BGR)
 
     def calc_number(self, card):
         """ Calculates number of symbols by analyzing num of symbol contours"""
