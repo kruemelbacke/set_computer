@@ -6,8 +6,8 @@ from card_detection import CCardDetector
 from utilities import draw_card_contours, draw_attributes, draw_num_of_cards, show_img_from_cards
 
 ###########################################
-TARGET = False
-GAMEMODE = False
+TARGET = True
+GAMEMODE = True
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
@@ -24,9 +24,9 @@ if TARGET:
     COUNTER_CERTAINTY = 2
 else:
     # IMG_PATH = "Imgs/2022-08-14_12-16-12.png" # purple is rather black
-    # IMG_PATH = "Imgs/2022-08-11_14-42-06.png" # wrong card on field
+    IMG_PATH = "Imgs/2022-08-11_14-42-06.png" # wrong card on field
     # IMG_PATH = "Imgs/2022-08-10_18-33-38.png" # strong warm and cold light
-    IMG_PATH = "Imgs/Original.png"
+    # IMG_PATH = "Imgs/Original.png"
 
     WIN_FLATTEN_W = 200
     WIN_FLATTEN_H = 300
@@ -99,10 +99,10 @@ if __name__ == '__main__':
             else:
                 cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
 
-                # show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading Detection", \
-                    # (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                # show_img_from_cards(Cards, "warp_color_detection", "Color Detection", \
-                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                show_img_from_cards([Cards[9], Cards[2], Cards[8]], "warp_symbol_center_boxes", "Shading Detection", \
+                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                show_img_from_cards([Cards[2], Cards[3], Cards[7], Cards[10]], "warp_color_detection", "Color Detection", \
+                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
                 show_img_from_cards(Cards, "warp", "Flatten", \
                     (WIN_FLATTEN_W, WIN_FLATTEN_H))
                 show_img_from_cards([Cards[7]], "warp_grey", "Flatten grey", \
@@ -111,7 +111,7 @@ if __name__ == '__main__':
                     (WIN_FLATTEN_W, WIN_FLATTEN_H))
                 show_img_from_cards([Cards[7]], "symbol_mask", "Symbol mask", \
                     (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                show_img_from_cards([Cards[7]], "warp_white_balanced", "White balanced", \
+                show_img_from_cards(Cards, "warp_white_balanced", "White balanced", \
                     (WIN_FLATTEN_W, WIN_FLATTEN_H))
 
             if TARGET:

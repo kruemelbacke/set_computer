@@ -68,6 +68,17 @@ class CCardClassifier:
         card.symbol_mask = mask
 
         self.correct_white_balance(card)
+        #######################################################################
+        # temp_cnts = []
+        # for cnt in card.symbol_contours:
+        #     temp_cnts.append(cnt)
+        # cv.drawContours(card.warp_white_balanced,temp_cnts, -1, (0,0,0), 3)
+        # cv.drawContours(card.warp_white_balanced,temp_cnts, -1, (0,0.8,1), 2)
+
+        # cv.putText(card.warp_white_balanced, (f"Number of symbols: {len(contours)}"),
+        #     (5, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2, cv.LINE_AA)
+        # cv.putText(card.warp_white_balanced, (f"Number of symbols: {len(contours)}"),
+        #     (5, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0,0.8,1), 1, cv.LINE_AA)
 
 
     def calc_number(self, card):
@@ -104,12 +115,12 @@ class CCardClassifier:
         center_box_hsv = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HSV)
         saturation_hsv = center_box_hsv[:, :, 1].mean()
         cv.putText(card.warp_symbol_center_boxes, f"Sat: {saturation_hsv:0.2f}", (5, 20), \
-            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+            cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,0,0), 2)
 
         center_box_hls = cv.cvtColor(np.float32(center_box), cv.COLOR_BGR2HLS)
         lightness_hls = center_box_hls[:, :, 1].mean()
         cv.putText(card.warp_symbol_center_boxes, f"Lig: {lightness_hls:0.2f}", (5, 40), \
-            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+            cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,0,0), 2)
         if saturation_hsv > 0.5:
             card.attributes["shading"] = "solid"
         elif lightness_hls > 0.9 and saturation_hsv < 0.1:
@@ -118,7 +129,7 @@ class CCardClassifier:
             card.attributes["shading"] = "hatched"
 
         cv.putText(card.warp_symbol_center_boxes, card.get_shading(), (5, 60), \
-            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+            cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,0,0), 2)
 
 
     def calc_color(self, card):
@@ -146,13 +157,13 @@ class CCardClassifier:
 
         card.warp_color_detection = card.warp_white_balanced.copy()
         cv.putText(card.warp_color_detection, f"Mean B: {mean_b:0.3f}", (5, 20), \
-            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+            cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,0,0), 2)
         cv.putText(card.warp_color_detection, f"Mean G: {mean_g:0.3f}", (5, 40), \
-            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+            cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,0,0), 2)
         cv.putText(card.warp_color_detection, f"Mean R: {mean_r:0.3f}", (5, 60), \
-            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+            cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,0,0), 2)
         cv.putText(card.warp_color_detection, f"Min Val: {min_value:0.2f}", (5, 80), \
-            cv.FONT_HERSHEY_SIMPLEX, 0.8, (255,0,0), 2)
+            cv.FONT_HERSHEY_SIMPLEX, 0.7, (255,0,0), 2)
 
 
     def compare_symbol_reference(self, symbol_qcard):
