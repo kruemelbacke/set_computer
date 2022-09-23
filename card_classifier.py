@@ -68,7 +68,7 @@ class CCardClassifier:
         card.symbol_mask = mask
 
         self.correct_white_balance(card)
-        self.gain_colors(card, 2)
+        self.gain_colors(card, 100)
 
         #######################################################################
         # temp_cnts = []
@@ -151,16 +151,15 @@ class CCardClassifier:
             "purple" : mean_b
         }
         max_color = max(color_means, key=color_means.get)
+        card.attributes["color"] = max_color
 
-        warp_hsv = cv.cvtColor(np.float32(card.warp_white_balanced),\
-             cv.COLOR_BGR2HSV)
+        # warp_hsv = cv.cvtColor(np.float32(card.warp_white_balanced),\
+        #      cv.COLOR_BGR2HSV)
 
-        min_value = np.amin(warp_hsv[:, :, 2])
+        # min_value = np.amin(warp_hsv[:, :, 2])
 
-        if min_value < 0.15:
-            card.attributes["color"] = "purple"
-        else:
-            card.attributes["color"] = max_color
+        # if min_value < 0.15:
+        #     card.attributes["color"] = "purple"
 
         card.warp_color_detection = card.warp_white_balanced.copy()
         cv.putText(card.warp_color_detection, f"Mean B: {mean_b:0.3f}", (5, 20), \
