@@ -153,10 +153,10 @@ class CCardClassifier:
         max_color = max(color_means, key=color_means.get)
         card.attributes["color"] = max_color
 
-        # warp_hsv = cv.cvtColor(np.float32(card.warp_white_balanced),\
-        #      cv.COLOR_BGR2HSV)
+        warp_hsv = cv.cvtColor(np.float32(card.warp_white_balanced),\
+             cv.COLOR_BGR2HSV)
 
-        # min_value = np.amin(warp_hsv[:, :, 2])
+        min_value = np.amin(warp_hsv[:, :, 2])
 
         # if min_value < 0.15:
         #     card.attributes["color"] = "purple"
