@@ -7,7 +7,7 @@ from utilities import draw_card_contours, draw_attributes, draw_num_of_cards, sh
 
 ###########################################
 TARGET = True
-GAMEMODE = True
+GAMEMODE = False
 # Possible: True or False
 # True: running on Raspberry Pi with Camera
 # False:running on Host loading local image
@@ -99,8 +99,8 @@ if __name__ == '__main__':
             else:
                 cv.imshow("CardDetection", cv.resize(img_raw, (WIN_BIG_W, WIN_BIG_H)))
 
-                show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading Detection", \
-                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                # show_img_from_cards(Cards, "warp_symbol_center_boxes", "Shading Detection", \
+                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
                 # show_img_from_cards([Cards[2], Cards[3], Cards[7], Cards[10]], "warp_color_detection", "Color Detection", \
                 #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
                 # show_img_from_cards(Cards, "warp", "Flatten", \
@@ -111,8 +111,8 @@ if __name__ == '__main__':
                 #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
                 # show_img_from_cards([Cards[7]], "symbol_mask", "Symbol mask", \
                 #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
-                # show_img_from_cards(Cards, "warp_white_balanced", "White balanced", \
-                #     (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                show_img_from_cards(Cards, "warp_white_balanced", "White balanced", \
+                    (WIN_FLATTEN_W, WIN_FLATTEN_H))
 
             if TARGET:
                 key = cv.waitKey(1) & 0xFF
