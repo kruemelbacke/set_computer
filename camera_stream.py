@@ -7,7 +7,7 @@ from picamera import PiCamera
 
 class CCameraStream:
     """Camera Stream"""
-    def __init__(self, res=(640, 480), fps=30):
+    def __init__(self, res, fps):
         self.camera = PiCamera()
         self.camera.resolution = res
         self.camera.framerate = fps
