@@ -54,7 +54,7 @@ def exit_programm(event, x, y, flags, param):
 
 if __name__ == '__main__':
     if TARGET:
-        CamStream = CCameraStream(res=(1920, 1088), fps=10)
+        CamStream = CCameraStream(res=(1280, 720), fps=10)
         CamStream.run()
     try:
         CardDetector = CCardDetector()
