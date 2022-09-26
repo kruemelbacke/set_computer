@@ -62,6 +62,8 @@ if __name__ == '__main__':
             cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
             cv.setMouseCallback("CardDetection", exit_programm)
 
+        set_found = False
+
         while True:
             if TARGET:
                 img_raw = CamStream.get()
@@ -75,12 +77,15 @@ if __name__ == '__main__':
 
             if len(set_cards) == 3:
                 # SET found!
-                playsound("set_audio_sample.wav")
+                if set_found is False:
+                    playsound("set_audio_sample.wav")
                 draw_card_contours(img_raw, set_cards, (0, 255, 0))
                 show_img_from_cards(set_cards, "warp_white_balanced", \
                     "Found SET", (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                set_found = True
             else:
                 cv.destroyWindow("Found SET")
+                set_found = False
 
             draw_attributes(img_raw, Cards)
             draw_num_of_cards(img_raw, Cards)
