@@ -34,8 +34,6 @@ else:
     WIN_BIG_W = 1280
     WIN_BIG_H = 720
 
-    COUNTER_CERTAINTY = 1
-
 if GAMEMODE:
     WIN_FLATTEN_W = 100
     WIN_FLATTEN_H = 150
@@ -64,7 +62,6 @@ if __name__ == '__main__':
             cv.setWindowProperty("CardDetection",cv.WND_PROP_FULLSCREEN,cv.WINDOW_FULLSCREEN)
             cv.setMouseCallback("CardDetection", exit_programm)
 
-        set_counter = 0
         while True:
             if TARGET:
                 img_raw = CamStream.get()
@@ -77,19 +74,13 @@ if __name__ == '__main__':
             set_cards = set_engine.find_set_primitive_loop(Cards)
 
             if len(set_cards) == 3:
-                set_counter += 1
-                if set_counter == COUNTER_CERTAINTY:
-                    # SET found!
-                    playsound("set_audio_sample.wav")
-
-                if set_counter >= COUNTER_CERTAINTY:
-                    draw_card_contours(img_raw, set_cards, (0, 255, 0))
-                    show_img_from_cards(set_cards, "warp_white_balanced", \
-                        "Found SET", (WIN_FLATTEN_W, WIN_FLATTEN_H))
+                # SET found!
+                playsound("set_audio_sample.wav")
+                draw_card_contours(img_raw, set_cards, (0, 255, 0))
+                show_img_from_cards(set_cards, "warp_white_balanced", \
+                    "Found SET", (WIN_FLATTEN_W, WIN_FLATTEN_H))
             else:
-                if set_counter >= COUNTER_CERTAINTY:
-                    cv.destroyWindow("Found SET")
-                set_counter = 0
+                cv.destroyWindow("Found SET")
 
             draw_attributes(img_raw, Cards)
             draw_num_of_cards(img_raw, Cards)
