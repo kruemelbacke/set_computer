@@ -158,8 +158,8 @@ class CCardClassifier:
 
         min_value = np.amin(warp_hsv[:, :, 2])
 
-        # if min_value < 0.15:
-        #     card.attributes["color"] = "purple"
+        if min_value < 0.1:
+            card.attributes["color"] = "purple"
 
         card.warp_color_detection = card.warp_white_balanced.copy()
         cv.putText(card.warp_color_detection, f"Mean B: {mean_b:0.3f}", (5, 20), \
